@@ -1,10 +1,10 @@
 <?php
 
-namespace JDS\Framework\Dbal;
+namespace JDS\Dbal;
 
 use Doctrine\DBAL\Connection;
-use JDS\Framework\Dbal\Events\PostPersist;
-use JDS\Framework\EventDispatcher\EventDispatcher;
+use JDS\Dbal\Events\PostPersist;
+use JDS\EventDispatcher\EventDispatcher;
 
 class DataMapper
 {

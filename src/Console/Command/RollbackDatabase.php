@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Console\Command;
+namespace JDS\Console\Command;
 
 use _PHPStan_7961f7ae1\Nette\Neon\Exception;
 use Doctrine\DBAL\Connection;

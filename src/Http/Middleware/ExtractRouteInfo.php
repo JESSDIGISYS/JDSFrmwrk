@@ -1,14 +1,14 @@
 <?php
 
-namespace JDS\Framework\Http\Middleware;
+namespace JDS\Http\Middleware;
 
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
-use JDS\Framework\Http\HttpException;
-use JDS\Framework\Http\HttpRequestMethodException;
-use JDS\Framework\Http\Request;
-use JDS\Framework\Http\Response;
+use JDS\Http\HttpException;
+use JDS\Http\HttpRequestMethodException;
+use JDS\Http\Request;
+use JDS\Http\Response;
 use function FastRoute\simpleDispatcher;
 
 class ExtractRouteInfo implements MiddlewareInterface

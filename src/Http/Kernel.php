@@ -1,11 +1,11 @@
 <?php
 
-namespace JDS\Framework\Http;
+namespace JDS\Http;
 
-use JDS\Framework\EventDispatcher\EventDispatcher;
-use JDS\Framework\Http\Event\ResponseEvent;
-use JDS\Framework\Http\Middleware\RequestHandlerInterface;
-use JDS\Framework\Routing\RouterInterface;
+use JDS\EventDispatcher\EventDispatcher;
+use JDS\Http\Event\ResponseEvent;
+use JDS\Http\Middleware\RequestHandlerInterface;
+use JDS\Routing\RouterInterface;
 use Psr\Container\ContainerInterface;
 
 class Kernel

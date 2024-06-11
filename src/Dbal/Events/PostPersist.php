@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Dbal\Events;
+namespace JDS\Dbal\Events;
 
 use JDS\Framework\Dbal\Entity;
 use JDS\Framework\EventDispatcher\Event;

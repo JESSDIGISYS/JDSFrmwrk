@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Console\Command;
+namespace JDS\Console\Command;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;

@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Http;
+namespace JDS\Http;
 
 class Response
 {

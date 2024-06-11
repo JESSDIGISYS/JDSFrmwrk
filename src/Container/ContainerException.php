@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Container;
+namespace JDS\Container;
 
 use Psr\Container\ContainerExceptionInterface;
 

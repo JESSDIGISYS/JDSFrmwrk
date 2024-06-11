@@ -1,6 +1,8 @@
 <?php
 
-namespace Framework\Tests;
+namespace Tests;
+
+use Tests\DependencyClass;
 
 class DependantClass
 {

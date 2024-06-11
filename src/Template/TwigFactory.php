@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Template;
+namespace JDS\Template;
 
 use JDS\Framework\Session\SessionInterface;
 use Twig\Environment;

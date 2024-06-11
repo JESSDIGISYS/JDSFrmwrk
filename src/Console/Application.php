@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Console;
+namespace JDS\Console;
 
 use Psr\Container\ContainerInterface;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Controller;
+namespace JDS\Controller;
 
 use JDS\Framework\Http\Request;
 use JDS\Framework\Http\Response;

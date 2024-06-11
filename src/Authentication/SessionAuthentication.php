@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Authentication;
+namespace JDS\Authentication;
 
 use JDS\Framework\Session\Session;
 use JDS\Framework\Session\SessionInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\EventDispatcher;
+namespace JDS\EventDispatcher;
 
 use Psr\EventDispatcher\StoppableEventInterface;
 

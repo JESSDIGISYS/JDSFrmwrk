@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Authentication;
+namespace JDS\Authentication;
 
 interface AuthRepositoryInterface
 {

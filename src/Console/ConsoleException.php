@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Console;
+namespace JDS\Console;
 
 class ConsoleException extends \Exception
 {

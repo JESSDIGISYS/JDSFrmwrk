@@ -1,9 +1,9 @@
 <?php
 
-namespace Framework\Tests;
+namespace Tests;
 
-use JDS\Framework\Container\Container;
-use JDS\Framework\Container\ContainerException;
+use JDS\Container\Container;
+use JDS\Container\ContainerException;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;

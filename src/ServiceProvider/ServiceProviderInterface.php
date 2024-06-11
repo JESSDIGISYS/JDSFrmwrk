@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\ServiceProvider;
+namespace JDS\ServiceProvider;
 
 interface ServiceProviderInterface
 {

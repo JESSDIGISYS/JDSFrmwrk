@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Routing;
+namespace JDS\Routing;
 
 use JDS\Framework\Http\Request;
 use Psr\Container\ContainerInterface;

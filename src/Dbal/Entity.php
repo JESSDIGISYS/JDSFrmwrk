@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Dbal;
+namespace JDS\Dbal;
 
 abstract class Entity
 {

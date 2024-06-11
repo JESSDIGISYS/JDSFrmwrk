@@ -1,8 +1,8 @@
 <?php
 
-namespace JDS\Framework\Http;
+namespace JDS\Http;
 
-use JDS\Framework\Session\SessionInterface;
+use JDS\Session\SessionInterface;
 
 class Request
 {

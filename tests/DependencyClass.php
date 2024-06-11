@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Tests;
+namespace Tests;
 
 use Pest\Arch\ValueObjects\Dependency;
 

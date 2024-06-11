@@ -1,9 +1,9 @@
 <?php
 
-namespace JDS\Framework\Http\Middleware;
+namespace JDS\Http\Middleware;
 
-use JDS\Framework\Http\Request;
-use JDS\Framework\Http\Response;
+use JDS\Http\Request;
+use JDS\Http\Response;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;

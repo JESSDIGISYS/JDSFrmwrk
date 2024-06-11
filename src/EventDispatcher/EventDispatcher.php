@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\EventDispatcher;
+namespace JDS\EventDispatcher;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\StoppableEventInterface;
@@ -13,7 +13,7 @@ class EventDispatcher implements EventDispatcherInterface
 	{
 		// loop over the listeners for the event
 		foreach ($this->getListenersForEvent($event) as $listener) {
-			// break if propogation stopped
+			// break if propagation stopped
 			if ($event instanceof StoppableEventInterface && $event->isPropagationStopped()) {
 				return $event;
 			}

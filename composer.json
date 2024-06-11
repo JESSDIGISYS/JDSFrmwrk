@@ -12,12 +12,12 @@
   "license": "bsd-3-clause",
   "autoload": {
     "psr-4": {
-      "JDS\\Framework\\": "src/"
+      "JDS\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Framework\\Tests\\": "tests/"
+      "Tests\\": "tests/"
     }
   },
   "require": {
@@ -25,7 +25,8 @@
     "psr/container": "^2.0",
     "league/container": "^4.2",
     "twig/twig": "^v3.8",
-    "psr/event-dispatcher": "^1.0"
+    "psr/event-dispatcher": "^1.0",
+    "doctrine/dbal": "^4.0"
   },
   "require-dev": {
     "symfony/var-dumper": "^7.0",

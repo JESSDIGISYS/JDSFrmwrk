@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Tests;
+namespace Tests;
 
 use JDS\Framework\Session\Session;
 use PHPUnit\Framework\TestCase;

@@ -1,10 +1,10 @@
 <?php
 
-namespace JDS\Framework\Http\Middleware;
+namespace JDS\Http\Middleware;
 
-use JDS\Framework\Http\Request;
-use JDS\Framework\Http\Response;
-use JDS\Framework\Session\SessionInterface;
+use JDS\Http\Request;
+use JDS\Http\Response;
+use JDS\Session\SessionInterface;
 
 class StartSession implements MiddlewareInterface
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace JDS\Framework\Http\Event;
+namespace JDS\Http\Event;
 
-use JDS\Framework\EventDispatcher\Event;
-use JDS\Framework\Http\Request;
-use JDS\Framework\Http\Response;
+use JDS\EventDispatcher\Event;
+use JDS\Http\Request;
+use JDS\Http\Response;
 
 class ResponseEvent extends Event
 {

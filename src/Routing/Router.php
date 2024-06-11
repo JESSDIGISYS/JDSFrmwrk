@@ -1,9 +1,10 @@
 <?php
 
-namespace JDS\Framework\Routing;
+namespace JDS\Routing;
 
-use JDS\Framework\Controller\AbstractController;
-use JDS\Framework\Http\Request;
+use JDS\Controller\AbstractController;
+use JDS\Routing\RouterInterface;
+use JDS\Http\Request;
 use Psr\Container\ContainerInterface;
 
 class Router implements RouterInterface

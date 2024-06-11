@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Template;
+namespace JDS\Template;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

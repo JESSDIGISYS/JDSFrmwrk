@@ -1,6 +1,6 @@
 <?php
 
-namespace JDS\Framework\Session;
+namespace JDS\Session;
 
 interface SessionInterface
 {

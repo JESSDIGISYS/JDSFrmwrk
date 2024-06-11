@@ -1,11 +1,11 @@
 <?php
 
-namespace JDS\Framework\Http\Middleware;
+namespace JDS\Http\Middleware;
 
-use JDS\Framework\Http\Middleware\MiddlewareInterface;
-use JDS\Framework\Http\Request;
-use JDS\Framework\Http\Response;
-use JDS\Framework\Routing\RouterInterface;
+use JDS\Http\Middleware\MiddlewareInterface;
+use JDS\Http\Request;
+use JDS\Http\Response;
+use JDS\Routing\RouterInterface;
 use Psr\Container\ContainerInterface;
 
 class RouterDispatch implements MiddlewareInterface
