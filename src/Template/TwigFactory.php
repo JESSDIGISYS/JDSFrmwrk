@@ -22,7 +22,7 @@ class TwigFactory
 	{
 //		dd(dirname(__DIR__, 3) . '/templates');
 		// instantiate FileSysteLoader with templates path
-		$loader = new FilesystemLoader(dirname(__DIR__,2) . '/templates');
+		$loader = new FilesystemLoader($this->templatesPath . '/templates');
 
 		// instantiate Twig Environment with loader
 		$twig = new Environment($loader, [
