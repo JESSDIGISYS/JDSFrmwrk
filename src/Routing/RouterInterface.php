@@ -2,7 +2,7 @@
 
 namespace JDS\Routing;
 
-use JDS\Framework\Http\Request;
+use JDS\Http\Request;
 use Psr\Container\ContainerInterface;
 
 interface RouterInterface

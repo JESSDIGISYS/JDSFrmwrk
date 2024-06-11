@@ -2,8 +2,8 @@
 
 namespace JDS\Authentication;
 
-use JDS\Framework\Session\Session;
-use JDS\Framework\Session\SessionInterface;
+use JDS\Session\Session;
+use JDS\Session\SessionInterface;
 
 class SessionAuthentication implements SessionAuthInterface
 {

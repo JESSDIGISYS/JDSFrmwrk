@@ -2,7 +2,7 @@
 
 namespace JDS\Console;
 
-use JDS\Framework\Console\Command\CommandInterface;
+use JDS\Console\Command\CommandInterface;
 use Psr\Container\ContainerInterface;
 
 final class Kernel

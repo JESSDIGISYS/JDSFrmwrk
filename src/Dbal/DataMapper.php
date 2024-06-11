@@ -9,8 +9,8 @@ use JDS\EventDispatcher\EventDispatcher;
 class DataMapper
 {
 	public function __construct(
-		private Connection $connection,
-		private EventDispatcher $eventDispatcher
+		private readonly Connection $connection,
+		private readonly EventDispatcher $eventDispatcher
 	)
 	{
 	}
@@ -22,10 +22,10 @@ class DataMapper
 
 	public function save(Entity $subject): int|string|null
 	{
-		// dispatch postpersis event
+		// dispatch post persist event
 		$this->eventDispatcher->dispatch(new PostPersist($subject));
 
-		// return lastinsertid
+		// return last insert id
 		return $this->connection->lastInsertId();
 	}
 

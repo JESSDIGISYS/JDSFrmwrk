@@ -2,7 +2,7 @@
 
 namespace JDS\Template;
 
-use JDS\Framework\Session\SessionInterface;
+use JDS\Session\SessionInterface;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\DebugExtension;

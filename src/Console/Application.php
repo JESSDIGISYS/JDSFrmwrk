@@ -6,7 +6,7 @@ use Psr\Container\ContainerInterface;
 
 class Application
 {
-	public function __construct(private ContainerInterface $container)
+	public function __construct(private readonly ContainerInterface $container)
 	{
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use JDS\Framework\Session\Session;
+use JDS\Session\Session;
 use PHPUnit\Framework\TestCase;
 
 class SessionTest extends TestCase

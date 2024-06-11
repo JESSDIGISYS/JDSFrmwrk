@@ -2,8 +2,8 @@
 
 namespace JDS\Dbal\Events;
 
-use JDS\Framework\Dbal\Entity;
-use JDS\Framework\EventDispatcher\Event;
+use JDS\Dbal\Entity;
+use JDS\EventDispatcher\Event;
 
 class PostPersist extends Event
 {

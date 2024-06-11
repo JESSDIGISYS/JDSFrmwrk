@@ -2,8 +2,8 @@
 
 namespace JDS\Console\Command;
 
-use _PHPStan_7961f7ae1\Nette\Neon\Exception;
 use Doctrine\DBAL\Connection;
+use Exception;
 
 class RollbackDatabase implements CommandInterface
 {
