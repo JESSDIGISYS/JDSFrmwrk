@@ -33,6 +33,7 @@ final class Kernel
 		// get all files in the commands dir
 		$commandFiles = new \DirectoryIterator(__DIR__ . '/Command');
 
+		// this sets up command where we can use the command in the terminal
 		$namespace = $this->container->get('base-commands-namespace');
 
 		// loop over all files in the commands folder
