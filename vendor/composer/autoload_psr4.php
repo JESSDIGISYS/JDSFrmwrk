@@ -38,6 +38,7 @@ return array(
     'League\\Container\\' => array($vendorDir . '/league/container/src'),
     'Jean85\\' => array($vendorDir . '/jean85/pretty-package-versions/src'),
     'JDS\\' => array($baseDir . '/src'),
+    'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
     'Fidry\\CpuCoreCounter\\' => array($vendorDir . '/fidry/cpu-core-counter/src'),
     'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),
     'Doctrine\\Deprecations\\' => array($vendorDir . '/doctrine/deprecations/lib/Doctrine/Deprecations'),
