@@ -47,7 +47,10 @@ class Request
 
 	public function input($key): mixed
 	{
-		return $this->postParams[$key];
+		if (array_key_exists($key, $this->postParams)) {
+			return $this->postParams[$key];
+		}
+		return '';
 	}
 
 	public function getRouteHandler(): mixed
