@@ -22,6 +22,7 @@ class MigrateDatabase implements CommandInterface
 	public function execute(array $params = []): int
 	{
 		echo  'Executing: ' . $this->name . PHP_EOL;
+
 		$execute = 0;
 
 		// create a migrations table SQL if table not already in existence
@@ -46,7 +47,20 @@ class MigrateDatabase implements CommandInterface
 			// require the file
 			$migrationObject = require $this->migrationsPath . '/' . $migration;
 			// call the up method
-			$migrationObject->up($schema, $migration);
+			$up = false;
+			if (array_key_exists('up', $params)) {
+				if ($params['up']) {
+					$up = true;
+					$migrationObject->up($schema, $migration);
+				}
+			}
+			if (!$up) {
+				if (array_key_exists('down', $params)) {
+					if ($params['down']) {
+						$migrationObject->down($schema, $migration);
+					}
+				}
+			}
 
 			// add migration to database
 			$this->insertMigration($migration);
