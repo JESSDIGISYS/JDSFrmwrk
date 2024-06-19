@@ -46,7 +46,7 @@ class Authenticate implements MiddlewareInterface
 			]
 		];
 
-		return JWT::encode($payload, $this->jwtKey);
+		return JWT::encode($payload, $this->jwtKey, 'HS256');
 	}
 
 	public function setJwtKey(string $jwtKey): void
