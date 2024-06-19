@@ -24,7 +24,7 @@ class ExtractRouteInfo implements MiddlewareInterface
 	 */
 	public function process(Request $request, RequestHandlerInterface $requestHandler): Response
 	{
-		// create a dispactcher
+		// create a dispatcher
 		$dispatcher = simpleDispatcher(function (RouteCollector $routeCollector) {
 
 			foreach ($this->routes as $route) {

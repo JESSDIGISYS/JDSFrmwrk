@@ -78,6 +78,4 @@ class Session implements SessionInterface
 	{
 		return !$this->isAuthenticated();
 	}
-
-
 }

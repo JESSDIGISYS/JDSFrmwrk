@@ -11,11 +11,11 @@ class Request
 	private array $routeHandlerArgs;
 
 	public function __construct(
-		public readonly array $getParams,
-		public readonly array $postParams,
-		public readonly array $cookies,
-		public readonly array $files,
-		public readonly array $server
+		public array $getParams, // $_GET
+		public array $postParams = [], // $_POST
+		public array $cookies = [], // $_COOKIE
+		public array $files = [], // $_FILES
+		public array $server = [] // $_SERVER
 	)
 	{
 	}
@@ -73,6 +73,10 @@ class Request
 		$this->routeHandlerArgs = $routeHandlerArgs;
 	}
 
+	public function getServerVariable(string $serverVariable): ?string
+	{
+		return $this->server[$serverVariable] ?? null;
+	}
 
 }
 
