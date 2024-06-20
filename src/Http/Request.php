@@ -2,7 +2,9 @@
 
 namespace JDS\Http;
 
+use Exception;
 use JDS\Session\SessionInterface;
+use Throwable;
 
 class Request
 {
@@ -45,12 +47,9 @@ class Request
 		$this->session = $session;
 	}
 
-	public function input($key): mixed
+	public function postInput($key): mixed
 	{
-		if (array_key_exists($key, $this->postParams)) {
-			return $this->postParams[$key];
-		}
-		return '';
+			return $this->postParams[$key] ?? null;
 	}
 
 	public function getRouteHandler(): mixed
@@ -58,9 +57,19 @@ class Request
 		return $this->routeHandler;
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function setRouteHandler(mixed $routeHandler): void
 	{
-		$this->routeHandler = $routeHandler;
+		try {
+			if (empty($routeHandler)) {
+				throw new Exception('Route handler cannot be empty.');
+			}
+			$this->routeHandler = $routeHandler;
+		} catch (Throwable $exception) {
+			throw new Exception('Error setting route handler: ' . $exception->getMessage());
+		}
 	}
 
 	public function getRouteHandlerArgs(): array
@@ -68,9 +77,19 @@ class Request
 		return $this->routeHandlerArgs;
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function setRouteHandlerArgs(array $routeHandlerArgs): void
 	{
-		$this->routeHandlerArgs = $routeHandlerArgs;
+		try {
+			if (empty($routeHandlerArgs)) {
+				throw new Exception('Route handler args cannot be empty.');
+			}
+			$this->routeHandlerArgs = $routeHandlerArgs;
+		} catch (Throwable $exception) {
+			throw new Exception('Error setting route handler args: ' . $exception->getMessage());
+		}
 	}
 
 	public function getServerVariable(string $serverVariable): ?string
