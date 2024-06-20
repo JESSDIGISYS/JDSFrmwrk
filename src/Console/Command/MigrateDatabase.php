@@ -158,6 +158,11 @@ class MigrateDatabase implements CommandInterface
 
 	}
 
+	public function getConnection(): Connection
+	{
+		return $this->connection;
+	}
+
 	public function getNewId(int $length = 12, bool $symbol = false): string
 	{
 		$id = "";
