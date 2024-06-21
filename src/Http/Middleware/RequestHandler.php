@@ -48,6 +48,11 @@ class RequestHandler implements RequestHandlerInterface
 	{
 		array_splice($this->middleware, 0, 0, $middleware);
 	}
+
+	public function getContainer(): ContainerInterface
+	{
+		return $this->container;
+	}
 }
 
 
