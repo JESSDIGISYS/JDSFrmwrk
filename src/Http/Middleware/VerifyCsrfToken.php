@@ -19,7 +19,7 @@ class VerifyCsrfToken implements MiddlewareInterface
 
 		// retrieve the tokens
 		$tokenFromSession = $request->getSession()->get("csrf_token");
-		$tokenFromRequest = $request->input("_token");
+		$tokenFromRequest = $request->postInput("_token");
 
 		// throw an exception on mismatch
 		if (!hash_equals($tokenFromSession, $tokenFromRequest)) {
