@@ -21,6 +21,7 @@ class ExtractRouteInfo implements MiddlewareInterface
 	/**
 	 * @throws HttpException
 	 * @throws HttpRequestMethodException
+	 * @throws \Exception
 	 */
 	public function process(Request $request, RequestHandlerInterface $requestHandler): Response
 	{

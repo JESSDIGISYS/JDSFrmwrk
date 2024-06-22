@@ -10,7 +10,7 @@ use JDS\Session\SessionInterface;
 
 class Authenticate implements MiddlewareInterface
 {
-	private string $jwtKey;
+	private string $jwtKey; // todo move all JWT to login controller on client
 
 	public function __construct(
 		private SessionInterface $session
