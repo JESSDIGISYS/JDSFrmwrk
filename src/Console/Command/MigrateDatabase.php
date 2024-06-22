@@ -74,7 +74,7 @@ class MigrateDatabase implements CommandInterface
 			$execute += 1;
 		}
 		if ($execute > 0) {
-			echo 'SQL has been executed!' . PHP_EOL;
+			echo 'SQL has been executed ' . $execute . ' queries' . PHP_EOL;
 		} else {
 			echo 'SQL has NOT been executed!' . PHP_EOL;
 		}
