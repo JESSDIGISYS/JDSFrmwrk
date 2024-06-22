@@ -45,7 +45,7 @@ class ExtractRouteInfo implements MiddlewareInterface
 				$request->setRouteHandler($routeInfo[1]);
 
 				// set $request->routeHandlerArgs
-				$request->setRouteHandlerArgs($routeInfo[1][2]);
+				$request->setRouteHandlerArgs($routeInfo[1][2]) ?? $request->setRouteHandlerArgs($routeInfo[1]);
 
 				// inject route middleware on handler
 				if (is_array($routeInfo[1]) && isset($routeInfo[1][2])) {
