@@ -3,6 +3,7 @@
 namespace JDS\Http\Middleware;
 
 
+use Exception;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use JDS\Http\HttpException;
@@ -21,7 +22,7 @@ class ExtractRouteInfo implements MiddlewareInterface
 	/**
 	 * @throws HttpException
 	 * @throws HttpRequestMethodException
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function process(Request $request, RequestHandlerInterface $requestHandler): Response
 	{
@@ -45,18 +46,14 @@ class ExtractRouteInfo implements MiddlewareInterface
 				$request->setRouteHandler($routeInfo[1]);
 
 				// set $request->routeHandlerArgs
-
-					$request->setRouteHandlerArgs(
-						$routeInfo[1][2] ?? $routeInfo[1]
-					);
+				$request->setRouteHandlerArgs(
+					$routeInfo[1][2] ?? $routeInfo[1]
+				);
 
 				// inject route middleware on handler
 				if (is_array($routeInfo[1]) && isset($routeInfo[1][2])) {
 					$requestHandler->injectMiddleware($routeInfo[1][2]);
 				}
-
-//				return [$routeInfo[1], $routeInfo[2]]; // routeHandler, vars
-
 				break;
 
 			case Dispatcher::METHOD_NOT_ALLOWED:
