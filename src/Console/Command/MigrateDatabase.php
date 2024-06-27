@@ -19,7 +19,11 @@ class MigrateDatabase implements CommandInterface
 	{
 	}
 
-	public function execute(array $params = []): int
+    /**
+     * @throws Throwable
+     * @throws Exception
+     */
+    public function execute(array $params = []): int
 	{
 		echo  'Executing: ' . $this->name . PHP_EOL;
 
@@ -43,6 +47,7 @@ class MigrateDatabase implements CommandInterface
 
 		// create SQL for any migrations which have not been run ... i.e. which are not in the
 		// database
+        $upCalled = false;
 		foreach ($migrationsToApply as $migration) {
 			// require the file
 			$migrationObject = require $this->migrationsPath . '/' . $migration;
@@ -51,29 +56,35 @@ class MigrateDatabase implements CommandInterface
 			if (array_key_exists('up', $params)) {
 				if ($params['up']) {
 					$up = true;
+                    $upCalled = true;
 					$migrationObject->up($schema, $migration, $this->getConnection());
+
+                    // add migration to database
+                    $this->insertMigration($migration);
 				}
 			}
 			if (!$up) {
 				if (array_key_exists('down', $params)) {
 					if ($params['down']) {
 						$migrationObject->down($this->getConnection(), $migration);
+                        $this->removeMigration($migration);
 					}
 				}
 			}
 
-			// add migration to database
-			$this->insertMigration($migration);
 		}
 
-		// execute the SQL query
-		$sqlArray = $schema->toSql($this->connection->getDatabasePlatform());
+        // only execute if up method has been called
+        if ($upCalled) {
+            // execute the SQL query
+            $sqlArray = $schema->toSql($this->connection->getDatabasePlatform());
 
-		foreach ($sqlArray as $sql) {
-			$this->connection->executeQuery($sql);
-			$execute += 1;
-		}
-		if ($execute > 0) {
+            foreach ($sqlArray as $sql) {
+                $this->connection->executeQuery($sql);
+                $execute += 1;
+            }
+        }
+        if ($execute > 0) {
 			echo 'SQL has been executed ' . $execute . ' queries' . PHP_EOL;
 		} else {
 			echo 'SQL has NOT been executed!' . PHP_EOL;
@@ -82,19 +93,31 @@ class MigrateDatabase implements CommandInterface
 		return 0;
 	}
 
-	private function insertMigration($migration): void
+    /**
+     * @throws Exception
+     */
+    private function insertMigration($migration): void
 	{
-		try {
-			$sql = "INSERT INTO migrations (migration) VALUES (:mg);";
-			$stmt = $this->connection->prepare($sql);
+        $sql = "INSERT INTO migrations (migration) VALUES (:mg);";
+        $stmt = $this->connection->prepare($sql);
 
-			$stmt->bindValue(':mg', $migration);
+        $stmt->bindValue(':mg', $migration);
 
-			$stmt->executeStatement();
-		} catch (Throwable $throwable) {
-			throw $throwable;
-		}
-	}
+        $stmt->executeStatement();
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function removeMigration($migration): void
+    {
+        $sql = "DELETE FROM migrations WHERE migration = :mg;";
+        $stmt = $this->connection->prepare($sql);
+
+        $stmt->bindValue(':mg', $migration);
+
+        $stmt->executeStatement();
+    }
 
 	private function getMigrationFiles(): array
 	{
