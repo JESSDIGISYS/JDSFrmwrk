@@ -1,4 +1,8 @@
 <?php
+/*
+ * Copyright (c) 2024 Jessop Digital Systems All Rights Reserved
+ *
+ */
 
 namespace JDS\Http;
 

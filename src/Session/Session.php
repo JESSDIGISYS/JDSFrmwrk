@@ -6,6 +6,8 @@ class Session implements SessionInterface
 {
 	private const FLASH_KEY = 'flash';
 	public const AUTH_KEY = 'auth_id';
+	public const ACCESS_TOKEN = 'access_token';
+	public const REFRESH_TOKEN = 'refresh_token';
 
 	public function start(): void
 	{
@@ -20,7 +22,7 @@ class Session implements SessionInterface
 		}
 	}
 
-	public function set(string $key, $value): void
+	public function set(string $key, mixed $value): void
 	{
 		$_SESSION[$key] = $value;
 	}
