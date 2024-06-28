@@ -60,7 +60,7 @@ class SessionAuthentication implements SessionAuthInterface
 			'token_type' => 'access'
 		];
 
-		$this->accessToken = JWT::encode($accessPayload, $this->jwtSecretKey);
+		$this->accessToken = JWT::encode($accessPayload, $this->jwtSecretKey, 'HS256');
 
 		$refreshPayload = array_merge($commonPayload, [
 			'iat' => $issuedAt,
@@ -69,7 +69,7 @@ class SessionAuthentication implements SessionAuthInterface
 			'userid' => $user->getAuthId(),
 			'email' => $user->getEmail()
 		]);
-		$this->refreshToken = JWT::encode($refreshPayload, $this->jwtSecretKey);
+		$this->refreshToken = JWT::encode($refreshPayload, $this->jwtSecretKey, 'HS256');
 
 		// log the user in
 		$this->session->set(Session::AUTH_KEY, $user->getAuthId());
