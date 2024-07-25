@@ -43,7 +43,7 @@ class MigrateDatabase implements CommandInterface
 		// $appliedMigrations
 		$migrationsToApply = array_diff($migrationFiles, $appliedMigrations);
 
-		$schema = new Schema();
+//		$schema = new Schema();
 
 		// create SQL for any migrations which have not been run ... i.e. which are not in the
 		// database
@@ -57,7 +57,7 @@ class MigrateDatabase implements CommandInterface
 				if ($params['up']) {
 					$up = true;
                     $upCalled = true;
-					$migrationObject->up($schema, $migration, $this->getConnection());
+					$migrationObject->up($migration, $this->getConnection());
 
                     // add migration to database
                     $this->insertMigration($migration);
