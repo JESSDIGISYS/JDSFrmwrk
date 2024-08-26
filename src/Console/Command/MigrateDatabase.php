@@ -75,20 +75,20 @@ class MigrateDatabase implements CommandInterface
 		}
 
         // only execute if up method has been called
-        if ($upCalled) {
-            // execute the SQL query
-            $sqlArray = $schema->toSql($this->connection->getDatabasePlatform());
-
-            foreach ($sqlArray as $sql) {
-                $this->connection->executeQuery($sql);
-                $execute += 1;
-            }
-        }
-        if ($execute > 0) {
-			echo 'SQL has been executed ' . $execute . ' queries' . PHP_EOL;
-		} else {
-			echo 'SQL has NOT been executed!' . PHP_EOL;
-		}
+//        if ($upCalled) {
+//            // execute the SQL query
+//            $sqlArray = $schema->toSql($this->connection->getDatabasePlatform());
+//
+//            foreach ($sqlArray as $sql) {
+//                $this->connection->executeQuery($sql);
+//                $execute += 1;
+//            }
+//        }
+//        if ($execute > 0) {
+//			echo 'SQL has been executed ' . $execute . ' queries' . PHP_EOL;
+//		} else {
+//			echo 'SQL has NOT been executed!' . PHP_EOL;
+//		}
 		echo 'Executing MigrateDatabase command...' . PHP_EOL;
 		return 0;
 	}
