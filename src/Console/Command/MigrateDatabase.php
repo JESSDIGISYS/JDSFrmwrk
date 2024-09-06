@@ -43,7 +43,7 @@ class MigrateDatabase implements CommandInterface
 		// $appliedMigrations
 		$migrationsToApply = array_diff($migrationFiles, $appliedMigrations);
 
-		$schema = new Schema();
+//		$schema = new Schema();
 
 		// create SQL for any migrations which have not been run ... i.e. which are not in the
 		// database
@@ -57,7 +57,7 @@ class MigrateDatabase implements CommandInterface
 				if ($params['up']) {
 					$up = true;
                     $upCalled = true;
-					$migrationObject->up($schema, $migration, $this->getConnection());
+					$migrationObject->up($migration, $this->getConnection());
 
                     // add migration to database
                     $this->insertMigration($migration);
@@ -75,20 +75,20 @@ class MigrateDatabase implements CommandInterface
 		}
 
         // only execute if up method has been called
-        if ($upCalled) {
-            // execute the SQL query
-            $sqlArray = $schema->toSql($this->connection->getDatabasePlatform());
-
-            foreach ($sqlArray as $sql) {
-                $this->connection->executeQuery($sql);
-                $execute += 1;
-            }
-        }
-        if ($execute > 0) {
-			echo 'SQL has been executed ' . $execute . ' queries' . PHP_EOL;
-		} else {
-			echo 'SQL has NOT been executed!' . PHP_EOL;
-		}
+//        if ($upCalled) {
+//            // execute the SQL query
+//            $sqlArray = $schema->toSql($this->connection->getDatabasePlatform());
+//
+//            foreach ($sqlArray as $sql) {
+//                $this->connection->executeQuery($sql);
+//                $execute += 1;
+//            }
+//        }
+//        if ($execute > 0) {
+//			echo 'SQL has been executed ' . $execute . ' queries' . PHP_EOL;
+//		} else {
+//			echo 'SQL has NOT been executed!' . PHP_EOL;
+//		}
 		echo 'Executing MigrateDatabase command...' . PHP_EOL;
 		return 0;
 	}
