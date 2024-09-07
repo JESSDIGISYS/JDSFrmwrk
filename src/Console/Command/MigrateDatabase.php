@@ -149,7 +149,7 @@ class MigrateDatabase implements CommandInterface
 			try {
 
 				// create table
-				$table = $schema->createTable('migrations');
+				$table = $schema->createTable('migrations')->addOption('engine', 'InnoDB');
 
 				// id
 				$table->addColumn('id', Types::INTEGER, ['length' => 12, 'unsigned' => true, 'autoincrement' =>
