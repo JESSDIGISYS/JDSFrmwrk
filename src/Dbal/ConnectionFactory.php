@@ -11,7 +11,7 @@ use PDO;
 class ConnectionFactory
 {
 
-	public function __construct(private array $databaseUrl)
+	public function __construct(private readonly array $databaseUrl)
 	{
 	}
 
