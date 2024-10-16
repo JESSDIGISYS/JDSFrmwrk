@@ -23,7 +23,7 @@ class JwtAuthenticate implements MiddlewareInterface
 		$authHeader = $request->getServerVariable('HTTP_AUTHORIZATION');
 
 		// return failed auth if missing
-		if (!$authHeader) {
+		if (is_null($authHeader) || empty($authHeader) || !is_string($authHeader)) {
 			return new Response(
 				'Auth token missing',
 				401,
@@ -75,7 +75,7 @@ class JwtAuthenticate implements MiddlewareInterface
 		 // validate the token
 
 		 // continue processing the request
-		 return $requestHandler->handle($request);
+//		 return $requestHandler->handle($request);
 
 	 }
 }
