@@ -66,7 +66,7 @@ class MigrateDatabase implements CommandInterface
 			if (!$up) {
 				if (array_key_exists('down', $params)) {
 					if ($params['down']) {
-						$migrationObject->down($this->getConnection(), $migration);
+						$migrationObject->down($migration, $this->getConnection());
                         $this->removeMigration($migration);
 					}
 				}
@@ -156,7 +156,7 @@ class MigrateDatabase implements CommandInterface
 					true]);
 
 				// migration name
-				$table->addColumn('migration', Types::STRING, ['length' => 40]);
+				$table->addColumn('migration', Types::STRING, ['length' => 60]);
 
 				// datetime
 				$table->addColumn('created_at', Types::DATETIME_IMMUTABLE, ['default' => 'CURRENT_TIMESTAMP']);

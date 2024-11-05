@@ -20,7 +20,8 @@ class JwtService
         return JWT::encode($payload, $this->secretKey, $this->algorithm);
     }
 
-    public function decode(string $jwt) {
+    public function decode(string $jwt): \stdClass
+    {
         return JWT::decode($jwt, new Key($this->secretKey, $this->algorithm));
     }
 
