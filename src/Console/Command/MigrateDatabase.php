@@ -145,7 +145,7 @@ class MigrateDatabase implements CommandInterface
 					true]);
 
 				// migration name
-				$table->addColumn('migration', Types::STRING, ['length' => 40]);
+				$table->addColumn('migration', Types::STRING, ['length' => 60]);
 
 				// datetime
 				$table->addColumn('created_at', Types::DATETIME_IMMUTABLE, ['default' => 'CURRENT_TIMESTAMP']);
