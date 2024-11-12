@@ -28,67 +28,56 @@ class MigrateDatabase implements CommandInterface
 		echo  'Executing: ' . $this->name . PHP_EOL;
 
 		$execute = 0;
+        if (array_key_exists('up', $params)) {
 
-		// create a migrations table SQL if table not already in existence
-		$this->createMigrationsTable();
+            // create a migrations table SQL if table not already in existence
+            $this->createMigrationsTable();
 
 
-		// get $appliedMigrations which are already in the database.migrations table
-		$appliedMigrations = $this->getAppliedMigrations();
+            // get $appliedMigrations which are already in the database.migrations table
+            $appliedMigrations = $this->getAppliedMigrations();
 
-		// get the $migrationFiles from the migrations folder
-		$migrationFiles = $this->getMigrationFiles();
+            // get the $migrationFiles from the migrations folder
+            $migrationFiles = $this->getMigrationFiles();
 
-		// get the migrations to apply. i.e. they are in $migrationFiles but not in
-		// $appliedMigrations
-		$migrationsToApply = array_diff($migrationFiles, $appliedMigrations);
+            // get the migrations to apply. i.e. they are in $migrationFiles but not in
+            // $appliedMigrations
+            $migrationsToApply = array_diff($migrationFiles, $appliedMigrations);
 
-//		$schema = new Schema();
+            // create SQL for any migrations which have not been run ... i.e. which are not in the
+            // database
+            $upCalled = false;
+            foreach ($migrationsToApply as $migration) {
+                // require the file
+                $migrationObject = require $this->migrationsPath . '/' . $migration;
+                // call the up method
+                $up = false;
+                if (array_key_exists('up', $params)) {
+                    if ($params['up']) {
+                        $up = true;
+                        $upCalled = true;
+                        $migrationObject->up($migration, $this->getConnection());
 
-		// create SQL for any migrations which have not been run ... i.e. which are not in the
-		// database
-        $upCalled = false;
-		foreach ($migrationsToApply as $migration) {
-			// require the file
-			$migrationObject = require $this->migrationsPath . '/' . $migration;
-			// call the up method
-			$up = false;
-			if (array_key_exists('up', $params)) {
-				if ($params['up']) {
-					$up = true;
-                    $upCalled = true;
-					$migrationObject->up($migration, $this->getConnection());
+                        // add migration to database
+                        $this->insertMigration($migration);
+                    }
+                }
 
-                    // add migration to database
-                    $this->insertMigration($migration);
-				}
-			}
-			if (!$up) {
-				if (array_key_exists('down', $params)) {
-					if ($params['down']) {
-						$migrationObject->down($migration, $this->getConnection());
-                        $this->removeMigration($migration);
-					}
-				}
-			}
+            }
 
-		}
+        } elseif (array_key_exists('down', $params)) {
+            // get migrations applied
+            $appliedMigrations = $this->getAppliedMigrations();
+            foreach ($appliedMigrations as $migration) {
+                // require the file
+                $migrationObject = require $this->migrationsPath . '/' . $migration;
+                // call the down method
+                $migrationObject->down($this->getConnection(), $migration);
+                // remove the migration from database
+                $this->removeMigration($migration);
+            }
+        }
 
-        // only execute if up method has been called
-//        if ($upCalled) {
-//            // execute the SQL query
-//            $sqlArray = $schema->toSql($this->connection->getDatabasePlatform());
-//
-//            foreach ($sqlArray as $sql) {
-//                $this->connection->executeQuery($sql);
-//                $execute += 1;
-//            }
-//        }
-//        if ($execute > 0) {
-//			echo 'SQL has been executed ' . $execute . ' queries' . PHP_EOL;
-//		} else {
-//			echo 'SQL has NOT been executed!' . PHP_EOL;
-//		}
 		echo 'Executing MigrateDatabase command...' . PHP_EOL;
 		return 0;
 	}
