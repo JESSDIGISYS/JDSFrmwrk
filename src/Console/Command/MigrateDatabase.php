@@ -126,13 +126,10 @@ class MigrateDatabase implements CommandInterface
      *                    When false, retrieves them in ascending order. Default is false.
      * @return array The list of applied migrations.
      */
-    private function getAppliedMigrations(bool $down=false): array
+    private function getAppliedMigrations(): array
 	{
-        if ($down) {
-            $sql = 'SELECT migration FROM migrations ORDER BY migration DESC;';
-         } else {
-             $sql = 'SELECT migration FROM migrations ORDER BY migration ASC;';
-        }
+        $sql = 'SELECT migration FROM migrations ORDER BY migration ASC;';
+
 		$appliedMigrations = $this->connection->executeQuery($sql)->fetchFirstColumn();
 
 		return $appliedMigrations;
