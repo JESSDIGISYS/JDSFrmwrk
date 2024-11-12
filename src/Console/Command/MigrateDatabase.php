@@ -72,7 +72,7 @@ class MigrateDatabase implements CommandInterface
                 // require the file
                 $migrationObject = require $this->migrationsPath . '/' . $migration;
                 // call the down method
-                $migrationObject->down($this->getConnection(), $migration);
+                $migrationObject->down($migration, $this->getConnection());
                 // remove the migration from database
                 $this->removeMigration($migration);
             }
