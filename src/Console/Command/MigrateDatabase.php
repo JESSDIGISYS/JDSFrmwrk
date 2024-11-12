@@ -37,7 +37,7 @@ class MigrateDatabase implements CommandInterface
             // get $appliedMigrations which are already in the database.migrations table
             // since we are also going for the down as well as the up
             // we'll add a flag to be able to order in the proper order
-            $appliedMigrations = $this->getAppliedMigrations(false);
+            $appliedMigrations = $this->getAppliedMigrations();
 
             // get the $migrationFiles from the migrations folder
             $migrationFiles = $this->getMigrationFiles();
@@ -69,7 +69,7 @@ class MigrateDatabase implements CommandInterface
 
         } elseif (array_key_exists('down', $params)) {
             // get migrations applied
-            $appliedMigrations = $this->getAppliedMigrations(true);
+            $appliedMigrations = $this->getAppliedMigrations();
             foreach ($appliedMigrations as $migration) {
                 // require the file
                 $migrationObject = require $this->migrationsPath . '/' . $migration;
