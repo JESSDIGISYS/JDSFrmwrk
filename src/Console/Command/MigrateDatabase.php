@@ -70,7 +70,7 @@ class MigrateDatabase implements CommandInterface
         } elseif (array_key_exists('down', $params)) {
             // get migrations applied
             $appliedMigrations = $this->getAppliedMigrations();
-            foreach ($appliedMigrations as $migration) {
+            foreach (array_reverse($appliedMigrations,true) as $migration) {
                 // require the file
                 $migrationObject = require $this->migrationsPath . '/' . $migration;
                 // call the down method
