@@ -35,7 +35,9 @@ class MigrateDatabase implements CommandInterface
 
 
             // get $appliedMigrations which are already in the database.migrations table
-            $appliedMigrations = $this->getAppliedMigrations();
+            // since we are also going for the down as well as the up
+            // we'll add a flag to be able to order in the proper order
+            $appliedMigrations = $this->getAppliedMigrations(false);
 
             // get the $migrationFiles from the migrations folder
             $migrationFiles = $this->getMigrationFiles();
@@ -67,7 +69,7 @@ class MigrateDatabase implements CommandInterface
 
         } elseif (array_key_exists('down', $params)) {
             // get migrations applied
-            $appliedMigrations = $this->getAppliedMigrations();
+            $appliedMigrations = $this->getAppliedMigrations(true);
             foreach ($appliedMigrations as $migration) {
                 // require the file
                 $migrationObject = require $this->migrationsPath . '/' . $migration;
@@ -117,10 +119,20 @@ class MigrateDatabase implements CommandInterface
 		return $filterdFiles;
 	}
 
-	private function getAppliedMigrations(): array
+    /**
+     * Retrieves the list of applied migrations from the database.
+     *
+     * @param bool $down Optional. When true, retrieves the migrations in descending order.
+     *                    When false, retrieves them in ascending order. Default is false.
+     * @return array The list of applied migrations.
+     */
+    private function getAppliedMigrations(bool $down=false): array
 	{
-		$sql = 'SELECT migration FROM migrations ORDER BY migration ASC;';
-
+        if ($down) {
+            $sql = 'SELECT migration FROM migrations ORDER BY migration DESC;';
+         } else {
+             $sql = 'SELECT migration FROM migrations ORDER BY migration ASC;';
+        }
 		$appliedMigrations = $this->connection->executeQuery($sql)->fetchFirstColumn();
 
 		return $appliedMigrations;
