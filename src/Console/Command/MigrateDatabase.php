@@ -25,12 +25,15 @@ class MigrateDatabase implements CommandInterface
      */
     public function execute(array $params = []): int
 	{
-        dd($params);
-        $up_down = '';
+
+
         if (array_key_exists('up', $params)) {
-            $up_down = 'up';
+            echo  'Executing: ' . $this->name . ' "Up"' . PHP_EOL;
+        } elseif (array_key_exists('down', $params)) {
+            echo  'Executing: ' . $this->name . ' "Down"' . PHP_EOL;
+        } else {
+            echo  'Executing: ' . $this->name . PHP_EOL;
         }
-		echo  'Executing: ' . $this->name . PHP_EOL;
 
 		$execute = 0;
         // migrations up
