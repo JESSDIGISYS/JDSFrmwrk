@@ -28,6 +28,7 @@ class MigrateDatabase implements CommandInterface
 		echo  'Executing: ' . $this->name . PHP_EOL;
 
 		$execute = 0;
+        // migrations up
         if (array_key_exists('up', $params)) {
 
             // create a migrations table SQL if table not already in existence
@@ -49,27 +50,26 @@ class MigrateDatabase implements CommandInterface
             // create SQL for any migrations which have not been run ... i.e. which are not in the
             // database
             $upCalled = false;
+            // loop through migrations in ascending order
             foreach ($migrationsToApply as $migration) {
                 // require the file
                 $migrationObject = require $this->migrationsPath . '/' . $migration;
                 // call the up method
                 $up = false;
-                if (array_key_exists('up', $params)) {
-                    if ($params['up']) {
-                        $up = true;
-                        $upCalled = true;
-                        $migrationObject->up($migration, $this->getConnection());
+                if ($params['up']) {
+                    $up = true;
+                    $upCalled = true;
+                    $migrationObject->up($migration, $this->getConnection());
 
-                        // add migration to database
-                        $this->insertMigration($migration);
-                    }
+                    // add migration to database
+                    $this->insertMigration($migration);
                 }
-
             }
-
+        // migrations down
         } elseif (array_key_exists('down', $params)) {
             // get migrations applied
             $appliedMigrations = $this->getAppliedMigrations();
+            // loop through migrations in descending order
             foreach (array_reverse($appliedMigrations,true) as $migration) {
                 // require the file
                 $migrationObject = require $this->migrationsPath . '/' . $migration;
