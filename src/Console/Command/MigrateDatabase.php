@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
+use JDS\Http\FileNotFoundException;
 use Throwable;
 
 class MigrateDatabase implements CommandInterface
@@ -61,16 +62,22 @@ class MigrateDatabase implements CommandInterface
             // loop through migrations in ascending order
             foreach ($migrationsToApply as $migration) {
                 // require the file
-                $migrationObject = require $this->migrationsPath . '/' . $migration;
-                // call the up method
-                $up = false;
-                if ($params['up']) {
-                    $up = true;
-                    $upCalled = true;
-                    $migrationObject->up($migration, $this->getConnection());
+                if (file_exists($this->migrationsPath . '/' . $migration)) {
+                    $migrationObject = require $this->migrationsPath . '/' . $migration;
+                    // call the up method
+                    $up = false;
+                    if ($params['up']) {
+                        $up = true;
+                        $upCalled = true;
+                        $migrationObject->up($migration, $this->getConnection());
 
-                    // add migration to database
-                    $this->insertMigration($migration);
+                        // add migration to database
+                        $this->insertMigration($migration);
+                    }
+                } else {
+                    $this->removeMigration($migration);
+                    throw new FileNotFoundException('Migration file not found: ' . $migration);
+
                 }
             }
         // migrations down
