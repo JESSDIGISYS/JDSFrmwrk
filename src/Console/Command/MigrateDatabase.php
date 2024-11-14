@@ -77,7 +77,6 @@ class MigrateDatabase implements CommandInterface
                 } else {
                     $this->removeMigration($migration);
                     throw new FileNotFoundException('Migration file not found: ' . $migration);
-
                 }
             }
         // migrations down
@@ -86,12 +85,17 @@ class MigrateDatabase implements CommandInterface
             $appliedMigrations = $this->getAppliedMigrations();
             // loop through migrations in descending order
             foreach (array_reverse($appliedMigrations,true) as $migration) {
-                // require the file
-                $migrationObject = require $this->migrationsPath . '/' . $migration;
-                // call the down method
-                $migrationObject->down($migration, $this->getConnection());
-                // remove the migration from database
-                $this->removeMigration($migration);
+                if (file_exists($this->migrationsPath . '/' . $migration)) {
+                    // require the file
+                    $migrationObject = require $this->migrationsPath . '/' . $migration;
+                    // call the down method
+                    $migrationObject->down($migration, $this->getConnection());
+                    // remove the migration from database
+                    $this->removeMigration($migration);
+                } else {
+                    $this->removeMigration($migration);
+                    throw new FileNotFoundException('Migration file not found: ' . $migration);
+                }
             }
         }
 
