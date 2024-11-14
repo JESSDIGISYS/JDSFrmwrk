@@ -62,21 +62,17 @@ class MigrateDatabase implements CommandInterface
             // loop through migrations in ascending order
             foreach ($migrationsToApply as $migration) {
                 // require the file
-                if (file_exists($this->migrationsPath . '/' . $migration)) {
-                    $migrationObject = require $this->migrationsPath . '/' . $migration;
-                    // call the up method
-                    $up = false;
-                    if ($params['up']) {
-                        $up = true;
-                        $upCalled = true;
-                        $migrationObject->up($migration, $this->getConnection());
 
-                        // add migration to database
-                        $this->insertMigration($migration);
-                    }
-                } else {
-                    $this->removeMigration($migration);
-                    throw new FileNotFoundException('Migration file not found: ' . $migration);
+                $migrationObject = require $this->migrationsPath . '/' . $migration;
+                // call the up method
+                $up = false;
+                if ($params['up']) {
+                    $up = true;
+                    $upCalled = true;
+                    $migrationObject->up($migration, $this->getConnection());
+
+                    // add migration to database
+                    $this->insertMigration($migration);
                 }
             }
         // migrations down
@@ -94,7 +90,7 @@ class MigrateDatabase implements CommandInterface
                     $this->removeMigration($migration);
                 } else {
                     $this->removeMigration($migration);
-                    throw new FileNotFoundException('Migration file not found: ' . $migration);
+                    echo 'Migration file ' . $migration . ' not found! Removing from migrations' . PHP_EOL;
                 }
             }
         }
