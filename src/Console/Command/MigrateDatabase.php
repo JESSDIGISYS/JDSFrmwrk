@@ -91,14 +91,13 @@ class MigrateDatabase implements CommandInterface
             }
         // migrations down
         } elseif (array_key_exists('down', $params)) {
-            dd($params['down'], is_numeric($params['down']));
             if (is_numeric($params['down'])) {
                 $down = $params['down'];
                 $found = false;
                 $migrationFiles = $this->getMigrationFiles();
                 foreach ($migrationFiles as $migration) {
                     $mignumber = (int)substr($migration, 1, strpos($migration, '_') - 1);
-                    dd($mignumber);
+                    dd('Mig number', $mignumber);
                     if ($mignumber == $down) {
                         $migrationObject = require $this->migrationsPath . '/' . $migration;
                         $migrationObject->up($migration, $this->getConnection());
