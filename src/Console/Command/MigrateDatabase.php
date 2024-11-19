@@ -91,26 +91,42 @@ class MigrateDatabase implements CommandInterface
             }
         // migrations down
         } elseif (array_key_exists('down', $params)) {
-            // get migrations applied
-            $appliedMigrations = $this->getAppliedMigrations();
-            // loop through migrations in descending order
-            $mig_count = 0;
-            foreach (array_reverse($appliedMigrations,true) as $migration) {
-                if (file_exists($this->migrationsPath . '/' . $migration)) {
-                    // require the file
-                    $migrationObject = require $this->migrationsPath . '/' . $migration;
-                    // call the down method
-                    $migrationObject->down($migration, $this->getConnection());
-                    // remove the migration from database
-                    $this->removeMigration($migration);
-                    $mig_count++;
-                } else {
-                    $this->removeMigration($migration);
-                    echo 'Migration file ' . $migration . ' not found! Removing from migrations' . PHP_EOL;
+            if (is_numeric($params['down'])) {
+                $down = $params['down'];
+                $found = false;
+                $migrationFiles = $this->getMigrationFiles();
+                foreach ($migrationFiles as $migration) {
+                    $mignumber = (int)substr($migration, 1, strpos($migration, '_') - 1);
+                    dd($mignumber);
+                    if ($mignumber == $down) {
+                        $migrationObject = require $this->migrationsPath . '/' . $migration;
+                        $migrationObject->up($migration, $this->getConnection());
+                        $found = true;
+                        break;
+                    }
                 }
-            }
-            if ($mig_count >= count($appliedMigrations)) {
-                $this->connection->executeQuery('TRUNCATE migrations;');
+            } else {
+                // get migrations applied
+                $appliedMigrations = $this->getAppliedMigrations();
+                // loop through migrations in descending order
+                $mig_count = 0;
+                foreach (array_reverse($appliedMigrations, true) as $migration) {
+                    if (file_exists($this->migrationsPath . '/' . $migration)) {
+                        // require the file
+                        $migrationObject = require $this->migrationsPath . '/' . $migration;
+                        // call the down method
+                        $migrationObject->down($migration, $this->getConnection());
+                        // remove the migration from database
+                        $this->removeMigration($migration);
+                        $mig_count++;
+                    } else {
+                        $this->removeMigration($migration);
+                        echo 'Migration file ' . $migration . ' not found! Removing from migrations' . PHP_EOL;
+                    }
+                }
+                if ($mig_count >= count($appliedMigrations)) {
+                    $this->connection->executeQuery('TRUNCATE migrations;');
+                }
             }
         }
 
