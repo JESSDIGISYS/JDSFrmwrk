@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
+use JDS\Console\ConsoleException;
 use JDS\Http\FileNotFoundException;
 use Throwable;
 
@@ -26,14 +27,13 @@ class MigrateDatabase implements CommandInterface
      */
     public function execute(array $params = []): int
 	{
-        dd($params);
 
         if (array_key_exists('up', $params)) {
             echo  'Executing: ' . $this->name . ' "Up"' . PHP_EOL;
         } elseif (array_key_exists('down', $params)) {
             echo  'Executing: ' . $this->name . ' "Down"' . PHP_EOL;
         } else {
-            echo  'Executing: ' . $this->name . PHP_EOL;
+           throw new ConsoleException("Invalid parameters. Please use: --up or --down! Can also be --up=(integer) or --down=(integer) to specify the migration number to run. Example: --up-1 would run m00001_name.php and --down-1 would run m00001_name.php");
         }
 
 		$execute = 0;
