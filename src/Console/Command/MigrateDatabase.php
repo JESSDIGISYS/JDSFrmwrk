@@ -39,40 +39,54 @@ class MigrateDatabase implements CommandInterface
 		$execute = 0;
         // migrations up
         if (array_key_exists('up', $params)) {
+            if (is_numeric($params['up'])) {
+                $up = $params['up'];
+                $found = false;
+                $migrationFiles = $this->getMigrationFiles();
+                foreach ($migrationFiles as $migration) {
+                    $mignumber = (int)substr($migration, 1, strpos($migration, '_') - 1);
+                    if ($mignumber == $up) {
+                        $migrationObject = require $this->migrationsPath . '/' . $migration;
+                        $migrationObject->up($migration, $this->getConnection());
+                        $found = true;
+                        break;
+                    }
+                }
+            } else {
+                // create a migrations table SQL if table not already in existence
+                $this->createMigrationsTable();
 
-            // create a migrations table SQL if table not already in existence
-            $this->createMigrationsTable();
 
+                // get $appliedMigrations which are already in the database.migrations table
+                // since we are also going for the down as well as the up
+                // we'll add a flag to be able to order in the proper order
+                $appliedMigrations = $this->getAppliedMigrations();
 
-            // get $appliedMigrations which are already in the database.migrations table
-            // since we are also going for the down as well as the up
-            // we'll add a flag to be able to order in the proper order
-            $appliedMigrations = $this->getAppliedMigrations();
+                // get the $migrationFiles from the migrations folder
+                $migrationFiles = $this->getMigrationFiles();
 
-            // get the $migrationFiles from the migrations folder
-            $migrationFiles = $this->getMigrationFiles();
+                // get the migrations to apply. i.e. they are in $migrationFiles but not in
+                // $appliedMigrations
+                $migrationsToApply = array_diff($migrationFiles, $appliedMigrations);
 
-            // get the migrations to apply. i.e. they are in $migrationFiles but not in
-            // $appliedMigrations
-            $migrationsToApply = array_diff($migrationFiles, $appliedMigrations);
+                // create SQL for any migrations which have not been run ... i.e. which are not in the
+                // database
+                $upCalled = false;
+                // loop through migrations in ascending order
+                foreach ($migrationsToApply as $migration) {
+                    // require the file
 
-            // create SQL for any migrations which have not been run ... i.e. which are not in the
-            // database
-            $upCalled = false;
-            // loop through migrations in ascending order
-            foreach ($migrationsToApply as $migration) {
-                // require the file
+                    $migrationObject = require $this->migrationsPath . '/' . $migration;
+                    // call the up method
+                    $up = false;
+                    if ($params['up']) {
+                        $up = true;
+                        $upCalled = true;
+                        $migrationObject->up($migration, $this->getConnection());
 
-                $migrationObject = require $this->migrationsPath . '/' . $migration;
-                // call the up method
-                $up = false;
-                if ($params['up']) {
-                    $up = true;
-                    $upCalled = true;
-                    $migrationObject->up($migration, $this->getConnection());
-
-                    // add migration to database
-                    $this->insertMigration($migration);
+                        // add migration to database
+                        $this->insertMigration($migration);
+                    }
                 }
             }
         // migrations down
@@ -80,6 +94,7 @@ class MigrateDatabase implements CommandInterface
             // get migrations applied
             $appliedMigrations = $this->getAppliedMigrations();
             // loop through migrations in descending order
+            $mig_count = 0;
             foreach (array_reverse($appliedMigrations,true) as $migration) {
                 if (file_exists($this->migrationsPath . '/' . $migration)) {
                     // require the file
@@ -88,10 +103,14 @@ class MigrateDatabase implements CommandInterface
                     $migrationObject->down($migration, $this->getConnection());
                     // remove the migration from database
                     $this->removeMigration($migration);
+                    $mig_count++;
                 } else {
                     $this->removeMigration($migration);
                     echo 'Migration file ' . $migration . ' not found! Removing from migrations' . PHP_EOL;
                 }
+            }
+            if ($mig_count >= count($appliedMigrations)) {
+                $this->connection->executeQuery('TRUNCATE migrations;');
             }
         }
 
