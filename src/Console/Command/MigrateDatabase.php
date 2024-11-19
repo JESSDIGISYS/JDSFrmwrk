@@ -91,6 +91,7 @@ class MigrateDatabase implements CommandInterface
             }
         // migrations down
         } elseif (array_key_exists('down', $params)) {
+            dd($params['down'], is_numeric($params['down']));
             if (is_numeric($params['down'])) {
                 $down = $params['down'];
                 $found = false;
