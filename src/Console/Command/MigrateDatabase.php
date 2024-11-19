@@ -26,7 +26,7 @@ class MigrateDatabase implements CommandInterface
      */
     public function execute(array $params = []): int
 	{
-
+        dd($params);
 
         if (array_key_exists('up', $params)) {
             echo  'Executing: ' . $this->name . ' "Up"' . PHP_EOL;
