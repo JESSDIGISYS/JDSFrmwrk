@@ -29,9 +29,17 @@ class MigrateDatabase implements CommandInterface
 	{
 
         if (array_key_exists('up', $params)) {
-            echo  'Executing: ' . $this->name . ' "Up"' . PHP_EOL;
+            $msg = 'Executing: ' . $this->name . ' "Up" ';
+            if (is_numeric($params['up'])) {
+                $msg .= 'for migration number ' . $params['up'];
+            }
+            echo  $msg . PHP_EOL;
         } elseif (array_key_exists('down', $params)) {
-            echo  'Executing: ' . $this->name . ' "Down"' . PHP_EOL;
+            $msg = 'Executing: ' . $this->name . ' "Down" ';
+            if (is_numeric($params['down'])) {
+                $msg .= 'for migration number ' . $params['down'];
+            }
+            echo $msg . PHP_EOL;
         } else {
            throw new ConsoleException("Invalid parameters. Please use: --up or --down! Can also be --up=(integer) or --down=(integer) to specify the migration number to run. Example: --up-1 would run m00001_name.php and --down-1 would run m00001_name.php");
         }
@@ -39,13 +47,14 @@ class MigrateDatabase implements CommandInterface
 		$execute = 0;
         // migrations up
         if (array_key_exists('up', $params)) {
+            echo 'Executing MigrateDatabase command...' . PHP_EOL;
             if (is_numeric($params['up'])) {
                 $up = $params['up'];
                 $found = false;
                 $migrationFiles = $this->getMigrationFiles();
                 foreach ($migrationFiles as $migration) {
-                    $mignumber = (int)substr($migration, 1, strpos($migration, '_') - 1);
-                    if ($mignumber == $up) {
+                    $mig_number = (int)substr($migration, 1, strpos($migration, '_') - 1);
+                    if ($mig_number == $up) {
                         $migrationObject = require $this->migrationsPath . '/' . $migration;
                         $migrationObject->up($migration, $this->getConnection());
                         $found = true;
@@ -96,13 +105,14 @@ class MigrateDatabase implements CommandInterface
             }
         // migrations down
         } elseif (array_key_exists('down', $params)) {
+            echo 'Executing MigrateDatabase command...' . PHP_EOL;
             if (is_numeric($params['down'])) {
                 $down = $params['down'];
                 $found = false;
                 $migrationFiles = $this->getMigrationFiles();
                 foreach ($migrationFiles as $migration) {
-                    $mignumber = (int)substr($migration, 1, strpos($migration, '_') - 1);
-                     if ($mignumber == $down) {
+                    $mig_number = (int)substr($migration, 1, strpos($migration, '_') - 1);
+                     if ($mig_number == $down) {
                         $migrationObject = require $this->migrationsPath . '/' . $migration;
                         $migrationObject->down($migration, $this->getConnection());
                         $found = true;
@@ -138,8 +148,6 @@ class MigrateDatabase implements CommandInterface
                 }
             }
         }
-
-		echo 'Executing MigrateDatabase command...' . PHP_EOL;
 		return 0;
 	}
 
