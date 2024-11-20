@@ -47,7 +47,6 @@ class MigrateDatabase implements CommandInterface
 		$execute = 0;
         // migrations up
         if (array_key_exists('up', $params)) {
-            echo 'Executing MigrateDatabase command...' . PHP_EOL;
             if (is_numeric($params['up'])) {
                 $up = $params['up'];
                 $found = false;
@@ -105,7 +104,6 @@ class MigrateDatabase implements CommandInterface
             }
         // migrations down
         } elseif (array_key_exists('down', $params)) {
-            echo 'Executing MigrateDatabase command...' . PHP_EOL;
             if (is_numeric($params['down'])) {
                 $down = $params['down'];
                 $found = false;
