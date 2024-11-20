@@ -52,6 +52,11 @@ class MigrateDatabase implements CommandInterface
                         break;
                     }
                 }
+                if ($found) {
+                    echo 'Migration ' . $up . ' successfully applied!' . PHP_EOL;
+                } else {
+                    echo 'Migration ' . $up . ' not found! No Migrations were applied...' . PHP_EOL;
+                }
             } else {
                 // create a migrations table SQL if table not already in existence
                 $this->createMigrationsTable();
@@ -97,13 +102,17 @@ class MigrateDatabase implements CommandInterface
                 $migrationFiles = $this->getMigrationFiles();
                 foreach ($migrationFiles as $migration) {
                     $mignumber = (int)substr($migration, 1, strpos($migration, '_') - 1);
-                    dd('Mig number', $mignumber);
-                    if ($mignumber == $down) {
+                     if ($mignumber == $down) {
                         $migrationObject = require $this->migrationsPath . '/' . $migration;
-                        $migrationObject->up($migration, $this->getConnection());
+                        $migrationObject->down($migration, $this->getConnection());
                         $found = true;
                         break;
                     }
+                }
+                if ($found) {
+                    echo 'Migration ' . $down . ' successfully rolled back!' . PHP_EOL;
+                } else {
+                    echo 'Migration ' . $down . ' not found! No Migrations were rolled back...' . PHP_EOL;
                 }
             } else {
                 // get migrations applied
