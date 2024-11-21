@@ -1,6 +1,11 @@
 {
   "name": "jds/frmwrk",
   "description": "Basic Framework with Authorization, Events, Migrations, Middleware, CSRF Tokens and JWT tokens. Only to be used by [JDS](https://jessdigisys.com) (Jessop Digital Systems) or for Educational Purposes. Not for Production Use!",
+  "homepage": "https://jessdigisys.com",
+  "support": {
+    "issues": "https://github.com/JDSFrmwrk/issues",
+    "source": "https://github.com/JDSFrmwrk"
+  },
   "authors": [
     {
       "name": "Mr J",
