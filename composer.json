@@ -1,6 +1,6 @@
 {
   "name": "jds/frmwrk",
-  "description": "Basic Framework with Authorization, Events, Migrations, Middleware and CSRF Tokens. Only to be used by JDS or for Educational Purposes. Not for Production Use!",
+  "description": "Basic Framework with Authorization, Events, Migrations, Middleware, CSRF Tokens and JWT tokens. Only to be used by [JDS](https://jessdigisys.com) (Jessop Digital Systems) or for Educational Purposes. Not for Production Use!",
   "authors": [
     {
       "name": "Mr J",
