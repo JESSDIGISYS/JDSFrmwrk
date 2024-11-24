@@ -8,3 +8,5 @@ interface ServiceInterface
     public function save(Entity $entity): bool;
     public function delete(Entity $entity): bool;
 }
+
+
