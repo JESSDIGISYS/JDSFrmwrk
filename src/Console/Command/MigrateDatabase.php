@@ -7,6 +7,7 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
 use JDS\Console\ConsoleException;
+use JDS\Dbal\GenerateNewId;
 use JDS\Http\FileNotFoundException;
 use PDOException;
 use Throwable;
@@ -17,7 +18,8 @@ class MigrateDatabase implements CommandInterface
 
     public function __construct(
         private Connection $connection,
-        private string     $migrationsPath
+        private string     $migrationsPath,
+        private GenerateNewId $generateNewId
     )
     {
     }
@@ -241,7 +243,7 @@ class MigrateDatabase implements CommandInterface
         $migrationObject = require $this->migrationsPath . '/' . $migration;
 
         try {
-            $migrationObject->$direction($migration, $this->getConnection());
+            $migrationObject->$direction($migration, $this->getConnection(), $this->getGenerateNewId());
         } catch (PDOException $pe) {
             switch ($pe->errorInfo[1]) {
                 case 1062:
@@ -262,5 +264,10 @@ class MigrateDatabase implements CommandInterface
     private function getConnection(): Connection
     {
         return $this->connection;
+    }
+
+    public function getGenerateNewId(): GenerateNewId
+    {
+        return $this->generateNewId;
     }
 }
