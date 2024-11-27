@@ -4,7 +4,6 @@ namespace JDS\Dbal;
 
 interface MenuServiceInterface extends ServiceInterface
 {
-    public function getMenuById(string $id): ?Entity;
-
+    public function getWithMenus(string $id): ?Entity;
 }
 
