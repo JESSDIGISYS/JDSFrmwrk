@@ -87,19 +87,22 @@ class MigrateDatabase implements CommandInterface
 
                 // create SQL for any migrations which have not been run ... i.e. which are not in the
                 // database
-                dd($migrationsToApply);
-                // loop through migrations in ascending order
-                foreach ($migrationsToApply as $migration) {
+                if (count($migrationsToApply) > 0) {
+                    // loop through migrations in ascending order
+                    foreach ($migrationsToApply as $migration) {
 
-                    // call the up method
-                    $up = false;
-                    if ($params['up']) {
-                        $up = true;
-                        $upCalled = true;
-                        $this->executeMigration('up', $migration, $this->getConnection());
-                        // add migration to database
-                        $this->insertMigration($migration);
+                        // call the up method
+                        $up = false;
+                        if ($params['up']) {
+                            $up = true;
+                            $upCalled = true;
+                            $this->executeMigration('up', $migration, $this->getConnection());
+                            // add migration to database
+                            $this->insertMigration($migration);
+                        }
                     }
+                } else {
+                    echo "All migrations have been applied..." . PHP_EOL;
                 }
             }
             // migrations down
@@ -108,13 +111,17 @@ class MigrateDatabase implements CommandInterface
                 $down = $params['down'];
                 $found = false;
                 $migrationFiles = $this->getMigrationFiles();
-                foreach ($migrationFiles as $migration) {
-                    $mig_number = (int)substr($migration, 1, strpos($migration, '_') - 1);
-                    if ($mig_number == $down) {
-                        $this->executeMigration('down', $migration, $this->getConnection());
-                        $found = true;
-                        break;
+                if (count($migrationFiles) > 0) {
+                    foreach ($migrationFiles as $migration) {
+                        $mig_number = (int)substr($migration, 1, strpos($migration, '_') - 1);
+                        if ($mig_number == $down) {
+                            $this->executeMigration('down', $migration, $this->getConnection());
+                            $found = true;
+                            break;
+                        }
                     }
+                } else {
+                    echo "There are no migrations to roll back..." . PHP_EOL;
                 }
                 if ($found) {
                     echo 'Migration ' . $down . ' successfully rolled back!' . PHP_EOL;
@@ -126,17 +133,21 @@ class MigrateDatabase implements CommandInterface
                 $appliedMigrations = $this->getAppliedMigrations();
                 // loop through migrations in descending order
                 $mig_count = 0;
-                foreach (array_reverse($appliedMigrations, true) as $migration) {
-                    if (file_exists($this->migrationsPath . '/' . $migration)) {
-                        // call the down method
-                        $this->executeMigration('down', $migration, $this->getConnection());
-                         // remove the migration from database
-                        $this->removeMigration($migration);
-                        $mig_count++;
-                    } else {
-                        $this->removeMigration($migration);
-                        echo 'Migration file ' . $migration . ' not found! Removing from migrations' . PHP_EOL;
+                if (count($appliedMigrations) == 0) {
+                    foreach (array_reverse($appliedMigrations, true) as $migration) {
+                        if (file_exists($this->migrationsPath . '/' . $migration)) {
+                            // call the down method
+                            $this->executeMigration('down', $migration, $this->getConnection());
+                            // remove the migration from database
+                            $this->removeMigration($migration);
+                            $mig_count++;
+                        } else {
+                            $this->removeMigration($migration);
+                            echo 'Migration file ' . $migration . ' not found! Removing from migrations' . PHP_EOL;
+                        }
                     }
+                } else {
+                    echo "There are no migrations to roll back..." . PHP_EOL;
                 }
                 if ($mig_count >= count($appliedMigrations)) {
                     $this->connection->executeQuery('TRUNCATE migrations;');
