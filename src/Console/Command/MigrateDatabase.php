@@ -87,7 +87,7 @@ class MigrateDatabase implements CommandInterface
 
                 // create SQL for any migrations which have not been run ... i.e. which are not in the
                 // database
-                $upCalled = false;
+                dd($migrationsToApply);
                 // loop through migrations in ascending order
                 foreach ($migrationsToApply as $migration) {
 
@@ -194,6 +194,10 @@ class MigrateDatabase implements CommandInterface
         return $this->connection->executeQuery($sql)->fetchFirstColumn();
     }
 
+    /**
+     * @throws Throwable
+     * @throws Exception
+     */
     private function createMigrationsTable(): void
     {
         // schema manager
