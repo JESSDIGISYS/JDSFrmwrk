@@ -133,7 +133,7 @@ class MigrateDatabase implements CommandInterface
                 $appliedMigrations = $this->getAppliedMigrations();
                 // loop through migrations in descending order
                 $mig_count = 0;
-                if (count($appliedMigrations) == 0) {
+                if (count($appliedMigrations) > 0) {
                     foreach (array_reverse($appliedMigrations, true) as $migration) {
                         if (file_exists($this->migrationsPath . '/' . $migration)) {
                             // call the down method
