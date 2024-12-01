@@ -8,7 +8,6 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
 use JDS\Console\ConsoleException;
 use JDS\Dbal\GenerateNewId;
-use JDS\Http\FileNotFoundException;
 use PDOException;
 use Throwable;
 
@@ -19,9 +18,13 @@ class MigrateDatabase implements CommandInterface
     public function __construct(
         private Connection $connection,
         private string     $migrationsPath,
-        private GenerateNewId $generateNewId
+        private GenerateNewId $generateNewId,
+        private ?string $changeName = null
     )
     {
+        if ($this->changeName) {
+            $this->setName($this->changeName);
+        }
     }
 
     /**
@@ -284,5 +287,10 @@ class MigrateDatabase implements CommandInterface
     public function getGenerateNewId(): GenerateNewId
     {
         return $this->generateNewId;
+    }
+
+    private function setName(string $name): void
+    {
+        $this->name = $name;
     }
 }
