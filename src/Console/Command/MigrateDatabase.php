@@ -17,14 +17,10 @@ class MigrateDatabase implements CommandInterface
 
     public function __construct(
         private Connection $connection,
-        private string     $migrationsPath,
-        private GenerateNewId $generateNewId,
-        private ?string $changeName = null
+        private string $migrationsPath,
+        private GenerateNewId $generateNewId
     )
     {
-        if ($this->changeName) {
-            $this->setName($this->changeName);
-        }
     }
 
     /**
@@ -289,8 +285,4 @@ class MigrateDatabase implements CommandInterface
         return $this->generateNewId;
     }
 
-    private function setName(string $name): void
-    {
-        $this->name = $name;
-    }
 }
