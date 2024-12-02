@@ -48,6 +48,8 @@ class MigrateDatabase implements CommandInterface
 
         $execute = 0;
         // migrations up
+        // create a migrations table SQL if table not already in existence
+        $this->createMigrationsTable();
         if (array_key_exists('up', $params)) {
             if (is_numeric($params['up'])) {
                 $up = $params['up'];
@@ -68,8 +70,6 @@ class MigrateDatabase implements CommandInterface
                     echo 'Migration ' . $up . ' not found! No Migrations were applied...' . PHP_EOL;
                 }
             } else {
-                // create a migrations table SQL if table not already in existence
-                $this->createMigrationsTable();
 
 
                 // get $appliedMigrations which are already in the database.migrations table
