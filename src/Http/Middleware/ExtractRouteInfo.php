@@ -44,7 +44,7 @@ class ExtractRouteInfo implements MiddlewareInterface
 			case Dispatcher::FOUND:
 				// set $request->routeHandler
 				$request->setRouteHandler($routeInfo[1]);
-
+                dd($routeInfo[2], $routeInfo[1], (isset($routeInfo[2]) ? "true" : "false"), isset($routeInfo[2]) ? "true" : "false");
 				// set $request->routeHandlerArgs
 				$request->setRouteHandlerArgs($routeInfo[2] ?? $routeInfo[1]);
 
