@@ -17,8 +17,7 @@ class MigrateDatabase implements CommandInterface
 
     public function __construct(
         private Connection $connection,
-        private string $migrationsPath,
-        private GenerateNewId $generateNewId
+        private string $migrationsPath
     )
     {
     }
