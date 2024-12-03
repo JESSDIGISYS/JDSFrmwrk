@@ -44,18 +44,14 @@ class ExtractRouteInfo implements MiddlewareInterface
 			case Dispatcher::FOUND:
 				// set $request->routeHandler
 				$request->setRouteHandler($routeInfo[1]);
-                dd($routeInfo[0], $routeInfo[1],$routeInfo[1][2], $routeInfo[2]);
-				// set $request->routeHandlerArgs
-				$request->setRouteHandlerArgs(
-//					$routeInfo[1][2] ?? $routeInfo[1] // original
-                    $routeInfo[1][2] ?? $routeInfo[2]
 
-				);
+				// set $request->routeHandlerArgs
+				$request->setRouteHandlerArgs($routeInfo[2]);
 
 				// inject route middleware on handler
-				if (is_array($routeInfo[1]) && isset($routeInfo[1][2])) {
-					$requestHandler->injectMiddleware($routeInfo[1][2]);
-				}
+                if (is_array($routeInfo[1]) && isset($routeInfo[1][2])) {
+                    $requestHandler->injectMiddleware($routeInfo[1][2]);
+                }
 				break;
 
 			case Dispatcher::METHOD_NOT_ALLOWED:
