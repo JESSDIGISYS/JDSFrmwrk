@@ -86,14 +86,7 @@ class Request
 	 */
 	public function setRouteHandlerArgs(array $routeHandlerArgs): void
 	{
-		try {
-			if (empty($routeHandlerArgs)) {
-				throw new Exception('Route handler args cannot be empty.');
-			}
-			$this->routeHandlerArgs = $routeHandlerArgs;
-		} catch (Throwable $exception) {
-			throw new Exception('Error setting route handler args: ' . $exception->getMessage());
-		}
+        $this->routeHandlerArgs = $routeHandlerArgs;
 	}
 
 	public function getServerVariable(string $serverVariable): ?string
