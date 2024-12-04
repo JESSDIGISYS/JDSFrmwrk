@@ -256,7 +256,7 @@ class MigrateDatabase implements CommandInterface
         $migrationObject = require $this->migrationsPath . '/' . $migration;
 
         try {
-            $migrationObject->$direction($migration, $this->getConnection(), $this->getGenerateNewId());
+            $migrationObject->$direction($migration, $this->getConnection());
         } catch (PDOException $pe) {
             switch ($pe->errorInfo[1]) {
                 case 1062:
@@ -271,17 +271,10 @@ class MigrateDatabase implements CommandInterface
                     throw new ConsoleException($pe->getMessage() . '  SQLSTATE[' . $pe->errorInfo[0] . ']: ' . $pe->errorInfo[1] . ' ' . $pe->errorInfo[2]);
             }
         }
-
     }
 
     private function getConnection(): Connection
     {
         return $this->connection;
     }
-
-    public function getGenerateNewId(): GenerateNewId
-    {
-        return $this->generateNewId;
-    }
-
 }
