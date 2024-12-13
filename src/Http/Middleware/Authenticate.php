@@ -17,6 +17,7 @@ class Authenticate implements MiddlewareInterface
 
 	public function process(Request $request, RequestHandlerInterface $requestHandler): Response
 	{
+        $this->session->start();
         // first check to see if the user logged in is actually in the user table
         $sql = "SELECT
                 user_id 
@@ -31,7 +32,6 @@ class Authenticate implements MiddlewareInterface
         if (!$user) {
             $this->session->remove('auth_id');
         }
-		$this->session->start();
 
 		if (!$this->session->isAuthenticated()) {
 			$this->session->setFlash('error', 'Please sign in first!');
