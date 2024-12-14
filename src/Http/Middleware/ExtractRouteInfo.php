@@ -10,13 +10,15 @@ use JDS\Http\HttpException;
 use JDS\Http\HttpRequestMethodException;
 use JDS\Http\Request;
 use JDS\Http\Response;
+use League\Container\Container;
 use function FastRoute\simpleDispatcher;
 
 class ExtractRouteInfo implements MiddlewareInterface
 {
-
-	public function __construct(private array $routes)
+    private string $routePath = '';
+	public function __construct(private readonly array $routes, private readonly Container $container)
 	{
+        $this->routePath = $this->container->get('routePath');
 	}
 
 	/**
@@ -30,6 +32,7 @@ class ExtractRouteInfo implements MiddlewareInterface
 		$dispatcher = simpleDispatcher(function (RouteCollector $routeCollector) {
 
 			foreach ($this->routes as $route) {
+                $route[1] = $this->routePath . $route[1];
 				$routeCollector->addRoute(...$route);
 			}
 		});
