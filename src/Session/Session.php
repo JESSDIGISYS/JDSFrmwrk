@@ -2,7 +2,9 @@
 
 namespace JDS\Session;
 
-class Session implements SessionInterface
+use JDS\Authentication\RuntimeException;
+
+class Session extends AbstractSession implements SessionInterface
 {
 	private const FLASH_KEY = 'flash';
 	public const AUTH_KEY = 'auth_id';
@@ -11,7 +13,9 @@ class Session implements SessionInterface
 
 	public function start(): void
 	{
-		if (session_status() === PHP_SESSION_ACTIVE) {
+        $this->configuration();
+
+        if (session_status() === PHP_SESSION_ACTIVE) {
 			return;
 		}
 

@@ -3,10 +3,11 @@
 namespace JDS\Authentication;
 
 use Firebase\JWT\JWT;
+use JDS\Session\AbstractSession;
 use JDS\Session\Session;
 use JDS\Session\SessionInterface;
 
-class SessionAuthentication implements SessionAuthInterface
+class SessionAuthentication extends AbstractSession implements SessionAuthInterface
 {
     private AuthUserInterface $user;
 
@@ -48,32 +49,9 @@ class SessionAuthentication implements SessionAuthInterface
      */
     public function login(AuthUserInterface $user): void
     {
-        // Set session save path.
-        $savePath = getenv('SESSION_SAVE_PATH') ?: ini_get('session.save_path');
 
-// Ensure the session save path exists.
-        if (!is_dir($savePath) && !mkdir($savePath, 0777, true) && !is_dir($savePath)) {
-            // If the directory cannot be created, throw an error.
-            throw new RuntimeException('Failed to create session save path: ' . $savePath);
-        }
+        $this->configuration();
 
-// Ensure the session save path is writable.
-        if (!is_writable($savePath)) {
-            throw new RuntimeException('Session save path is not writable: ' . $savePath);
-        }
-
-// Apply the session save path.
-        session_save_path($savePath);
-
-// Set session cookie parameters.
-        session_set_cookie_params([
-            'lifetime' => getenv('SESSION_COOKIE_LIFETIME') ?: 0,          // Default to session lifespan (0).
-            'path' => getenv('SESSION_COOKIE_PATH') ?: '/',               // Default to root path.
-            'domain' => getenv('SESSION_COOKIE_DOMAIN') ?: '',            // Default to current domain.
-            'secure' => getenv('SESSION_COOKIE_SECURE') === 'true',       // True for secure (HTTPS).
-            'httponly' => getenv('SESSION_COOKIE_HTTPONLY') === 'true',   // True for HTTP-only cookies.
-            'samesite' => getenv('SESSION_COOKIE_SAMESITE') ?: 'Lax',     // Default to "Lax".
-        ]);
         // start a session
         $this->session->start();
         $issuedAt = time();
