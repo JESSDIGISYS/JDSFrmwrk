@@ -3,7 +3,7 @@
         'name' => 'jds/frmwrk',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '48e14d13211b469d56ab54fa923a87cd6a190e9a',
+        'reference' => '01cd01eda14069905e0d9387bb3c7416bfaf3963',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -67,7 +67,7 @@
         'jds/frmwrk' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '48e14d13211b469d56ab54fa923a87cd6a190e9a',
+            'reference' => '01cd01eda14069905e0d9387bb3c7416bfaf3963',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -18,17 +18,20 @@ class AbstractSession
             throw new RuntimeException('Failed to create session save path: ' . $savePath);
         }
 
-// Ensure the session save path is writable.
+        // Ensure the session save path is writable.
         if (!is_writable($savePath)) {
             throw new RuntimeException('Session save path is not writable: ' . $savePath);
         }
 
-// Apply the session save path.
+        // Apply the session save path.
         session_save_path($savePath);
 
-// Set session cookie parameters.
+        // session name
+        session_name(getenv('SESSION_NAME') ?: ini_get('session.name'));
+
+        // Set session cookie parameters.
         session_set_cookie_params([
-            'lifetime' => getenv('SESSION_COOKIE_LIFETIME') ?: 900,          // Default to 15 minutes.
+            'lifetime' => getenv('SESSION_COOKIE_LIFETIME') ?: 300,          // Default to 5 minutes.
             'path' => getenv('SESSION_COOKIE_PATH') ?: '/',               // Default to root path.
             'domain' => getenv('SESSION_COOKIE_DOMAIN') ?: '',            // Default to current domain.
             'secure' => getenv('SESSION_COOKIE_SECURE') === 'true',       // True for secure (HTTPS).
