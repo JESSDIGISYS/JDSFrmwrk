@@ -1,0 +1,28 @@
+name: Prevent Direct Push to Master
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  block-master:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Source Branch
+        run: |
+          echo "Checking if the push comes from the development branch..."
+          if [[ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]]; then
+            echo "This is a new branch creation or tag push, allowing."
+          elif [[ "${{ github.event.ref }}" == "refs/heads/master" && "${{ github.event.repository.default_branch }}" == "master" ]]; then
+            SOURCE_BRANCH=$(git log --pretty=%D -1 | grep "origin/development" || echo "")
+            if [ -z "$SOURCE_BRANCH" ]; then
+              echo "Push to master is not from development. Failing the action."
+              exit 1
+            else
+              echo "Push from development detected. Proceeding."
+            fi
+          else
+            echo "Push not targeting master. Proceeding."
+          fi
