@@ -89,7 +89,16 @@ class SessionAuthentication extends AbstractSession implements SessionAuthInterf
 
     public function logout()
     {
+        // Remove all session keys related to the user (auth and tokens)
         $this->session->remove(Session::AUTH_KEY);
+        $this->session->remove(Session::ACCESS_TOKEN);
+        $this->session->remove(Session::REFRESH_TOKEN);
+
+        // Optionally clear the entire session
+        $this->session->clear();
+
+        // Destroy the session
+        $this->session->destroy();
     }
 
     public function getUser(): AuthUserInterface
