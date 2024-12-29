@@ -185,7 +185,7 @@ class MigrateDatabase implements CommandInterface
     {
         $migrationFiles = scandir($this->migrationsPath);
         $filterdFiles = array_filter($migrationFiles, function ($file) {
-            return !in_array($file, ['.', '..', '.gitignore', 'm00000_test.php']);
+            return !in_array($file, ['.', '..', '.gitignore', 'm00000_template.php']);
         });
         return $filterdFiles;
     }
