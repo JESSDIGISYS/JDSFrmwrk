@@ -16,8 +16,10 @@ class MigrateDatabase implements CommandInterface
     private string $name = 'database:migrations:migrate';
 
     public function __construct(
-        private Connection $connection,
-        private string $migrationsPath
+        private Connection     $connection,
+        private string         $migrationsPath,
+        private readonly array $initialize,
+        private GenerateNewId  $newId,
     )
     {
     }
@@ -48,7 +50,8 @@ class MigrateDatabase implements CommandInterface
         $execute = 0;
         // migrations up
         // create a migrations table SQL if table not already in existence
-        $this->createMigrationsTable();
+
+        $this->initializeProject($this->initialize);
         if (array_key_exists('up', $params)) {
             if (is_numeric($params['up'])) {
                 $up = $params['up'];
@@ -190,6 +193,67 @@ class MigrateDatabase implements CommandInterface
         return $filterdFiles;
     }
 
+
+    /**
+     * @throws Throwable
+     * @throws Exception
+     */
+    public function initializeProject(array $initialize): void
+    {
+        $filePath = $initialize['path'] . '/initialized.json'; // Path to the JSON file
+
+        // Step 1: Check if the file exists and the `initialized` flag is set
+        if ($this->isProjectInitialized($filePath)) {
+            echo 'Project is already initialized. Skipping setup.' . PHP_EOL;
+            return;
+        }
+
+        // Step 2: Run the initialization process
+        if (!$this->checkIfDatabaseExists($initialize['database'])) {
+            $this->createDatabase($initialize['database']);
+            $this->createUser($initialize['user'], $initialize['pass']);
+        }
+
+        $this->createMigrationsTable();
+
+        // Step 3: Mark the project as initialized in the JSON file
+        $this->markProjectAsInitialized($filePath);
+
+        echo 'Project setup complete.' . PHP_EOL;
+    }
+
+    private function isProjectInitialized(string $filePath): bool
+    {
+        // Check if the initialization file exists
+        if (!file_exists($filePath)) {
+            return false; // File doesn't exist, assume not initialized
+        }
+
+        // Read and decode the JSON file
+        $data = json_decode(file_get_contents($filePath), true);
+
+        // Check if the `initialized` key is set and true
+        return isset($data['initialized']) && $data['initialized'] === true;
+    }
+
+    private function markProjectAsInitialized(string $filePath): void
+    {
+        // Step 1: Build the JSON data
+        $data = [
+            'initialized' => true,
+            'timestamp' => date('c') // Current timestamp in ISO 8601 format
+        ];
+
+        // Step 2: Write to the file
+        try {
+            file_put_contents($filePath, json_encode($data, JSON_PRETTY_PRINT));
+        } catch (\Exception $e) {
+            echo 'Failed to write initialization data: ' . $e->getMessage() . PHP_EOL;
+        }
+    }
+
+
+
     /**
      * Retrieves the list of applied migrations from the database.
      *
@@ -224,6 +288,8 @@ class MigrateDatabase implements CommandInterface
                 // id
                 $table->addColumn('id', Types::INTEGER, ['length' => 12, 'unsigned' => true, 'autoincrement' =>
                     true]);
+
+                $table->addColumn('migration_id', Types::STRING, ['length' => 12, 'null' => false]);
 
                 // migration name
                 $table->addColumn('migration', Types::STRING, ['length' => 60]);
@@ -276,5 +342,35 @@ class MigrateDatabase implements CommandInterface
     private function getConnection(): Connection
     {
         return $this->connection;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkIfDatabaseExists(string $database): bool
+    {
+        $sql = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = :databaseName;";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('databaseName', $database);
+        $result = $stmt->executeQuery()->fetchFirstColumn();
+        return ((int)$result > 0);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createDatabase(string $database): void
+    {
+        $sql = "CREATE DATABASE IF NOT EXISTS $database DEFAULT CHARACTER SET utf8mb4; ";
+        $this->connection->executeQuery($sql);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createUser(string $username, string $password): void
+    {
+        $sql = "CREATE USER IF NOT EXISTS '$username'@'localhost' IDENTIFIED BY '$password'; ";
+        $this->connection->executeQuery($sql);
     }
 }
