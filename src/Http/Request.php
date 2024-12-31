@@ -93,6 +93,5 @@ class Request
     {
         return $this->server[$serverVariable] ?? null;
     }
-
 }
 

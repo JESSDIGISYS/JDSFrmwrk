@@ -54,7 +54,7 @@ class Kernel
 
 	public function terminate(Request $request, Response $response): void
 	{
-		$request->getSession()?->clearFlash();
+		$request->getSession()->clearFlash();
 //		if ($request->getSession()->isAuthenticated()) {
 //			$request->getSession()?->remove(SessionAuthentication::AUTH_KEY);
 //		}
