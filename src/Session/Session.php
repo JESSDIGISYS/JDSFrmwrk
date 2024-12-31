@@ -120,10 +120,10 @@ class Session extends AbstractSession implements SessionInterface
     {
         $authId = self::AUTH_KEY; // Preserve the current user's ID
 
-        $this->session->clear(); // Clears all session data
+        $this->clear(); // Clears all session data
 
         // Restore the authentication key to keep the user logged in
-        $this->session->set(Session::AUTH_KEY, $authId);
+        $this->set(Session::AUTH_KEY, $authId);
     }
 }
 
