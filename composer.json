@@ -36,7 +36,9 @@
     "doctrine/dbal": "^4.0",
     "firebase/php-jwt": "^6.10",
     "paragonie/sodium_compat": "^2.0",
-    "ext-openssl": "*"
+    "ext-openssl": "*",
+    "phpmailer/phpmailer": "^6.9",
+    "tinymce/tinymce": "^7.6"
   },
   "require-dev": {
     "symfony/var-dumper": "^7.0",
