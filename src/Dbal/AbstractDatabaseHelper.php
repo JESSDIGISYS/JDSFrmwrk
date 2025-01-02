@@ -7,7 +7,7 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Statement;
 
-abstract class AbstractRepository
+abstract class AbstractDatabaseHelper
 {
     /**
      * @throws Exception
