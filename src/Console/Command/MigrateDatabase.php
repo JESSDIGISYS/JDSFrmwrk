@@ -202,6 +202,8 @@ class MigrateDatabase implements CommandInterface
     {
         $filePath = $initialize['path'] . '/initialized.json'; // Path to the JSON file
 
+        $this->createMigrationsTable();
+
         // Step 1: Check if the file exists and the `initialized` flag is set
         if ($this->isProjectInitialized($filePath)) {
             echo 'Project is already initialized. Skipping setup.' . PHP_EOL;
@@ -214,7 +216,7 @@ class MigrateDatabase implements CommandInterface
             $this->createUser($initialize['user'], $initialize['pass']);
         }
 
-        $this->createMigrationsTable();
+
 
         // Step 3: Mark the project as initialized in the JSON file
         $this->markProjectAsInitialized($filePath);
