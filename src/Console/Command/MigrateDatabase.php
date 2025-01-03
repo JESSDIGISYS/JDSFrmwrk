@@ -163,10 +163,11 @@ class MigrateDatabase implements CommandInterface
      */
     private function insertMigration($migration): void
     {
-        $sql = "INSERT INTO migrations (migration) VALUES (:mg);";
+        $sql = "INSERT INTO migrations (migration_id, migration) VALUES (:migrationid, :mg);";
         $stmt = $this->connection->prepare($sql);
 
         $stmt->bindValue(':mg', $migration);
+        $stmt->bindValue(':migrationid', $this->newId->getNewId());
 
         $stmt->executeStatement();
     }
