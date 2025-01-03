@@ -291,7 +291,7 @@ class MigrateDatabase implements CommandInterface
                 $table->addColumn('id', Types::INTEGER, ['length' => 12, 'unsigned' => true, 'autoincrement' =>
                     true]);
 
-                $table->addColumn('migration_id', Types::STRING, ['length' => 12, 'null' => false]);
+                $table->addColumn('migration_id', Types::STRING, ['length' => 12]);
 
                 // migration name
                 $table->addColumn('migration', Types::STRING, ['length' => 60]);
