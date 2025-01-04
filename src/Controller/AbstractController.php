@@ -31,15 +31,5 @@ abstract class AbstractController
 
 		return $response;
 	}
-
-	public function getURI(): string
-	{
-		$uri = $_SERVER['REQUEST_URI'];
-		if (false !== $pos = strpos($uri, '?')) {
-			$uri = substr($uri, 0, $pos);
-		}
-		return rawurldecode($uri);
-	}
-
-
 }
+

@@ -27,8 +27,7 @@ interface BreadcrumbGeneratorInterface
     /**
      * Generates an array of breadcrumbs based on the provided path.
      *
-     * @param string $currentPath The current path from which breadcrumbs will be generated.
      * @return array An array representing the breadcrumb trail.
      */
-    public function generateBreadcrumbs(string $currentPath): array;
+    public function generateBreadcrumbs(): array;
 }
