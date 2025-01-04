@@ -10,7 +10,7 @@ abstract class AbstractController
 {
 	protected ?ContainerInterface $container = null;
 	protected Request $request;
-	public function setContainer(ContainenrIterface $container): void
+	public function setContainer(ContainerInterface $container): void
 	{
 		$this->container = $container;
 	}
@@ -30,13 +30,6 @@ abstract class AbstractController
 		$response->setContent($content);
 
 		return $response;
-	}
-
-	public function getURI(): string
-	{
-        $uri = $_SERVER['REQUEST_URI'] ?? '';
-        $cleanUri = strtok($uri, '?');
-        return $cleanUri !== false ? rawurldecode($cleanUri) : '';
 	}
 }
 
