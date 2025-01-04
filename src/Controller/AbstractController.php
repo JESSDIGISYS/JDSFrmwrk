@@ -10,7 +10,7 @@ abstract class AbstractController
 {
 	protected ?ContainerInterface $container = null;
 	protected Request $request;
-	public function setContainer(ContainerInterface $container): void
+	public function setContainer(ContainenrIterface $container): void
 	{
 		$this->container = $container;
 	}
@@ -34,12 +34,9 @@ abstract class AbstractController
 
 	public function getURI(): string
 	{
-		$uri = $_SERVER['REQUEST_URI'];
-		if (false !== $pos = strpos($uri, '?')) {
-			$uri = substr($uri, 0, $pos);
-		}
-		return rawurldecode($uri);
+        $uri = $_SERVER['REQUEST_URI'] ?? '';
+        $cleanUri = strtok($uri, '?');
+        return $cleanUri !== false ? rawurldecode($cleanUri) : '';
 	}
-
-
 }
+
