@@ -3,6 +3,7 @@
 namespace JDS\Session;
 
 use JDS\Authentication\RuntimeException;
+use Random\RandomException;
 
 class Session extends AbstractSession implements SessionInterface
 {
@@ -11,13 +12,17 @@ class Session extends AbstractSession implements SessionInterface
     public const ACCESS_TOKEN = 'access_token';
     public const REFRESH_TOKEN = 'refresh_token';
 
+    /**
+     * @throws RuntimeException
+     * @throws RandomException
+     */
     public function start(): void
     {
-        $this->configuration();
 
         if (session_status() === PHP_SESSION_ACTIVE) {
             return;
         }
+        $this->configuration();
 
         session_start();
 
