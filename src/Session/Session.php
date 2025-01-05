@@ -22,7 +22,7 @@ class Session extends AbstractSession implements SessionInterface
         if (session_status() === PHP_SESSION_ACTIVE) {
             return;
         }
-        $this->configuration();
+//        $this->configuration();
 
         session_start();
 
