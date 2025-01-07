@@ -1,8 +1,6 @@
 <?php
 
-namespace JDS\Session;
-
-use JDS\Authentication\RuntimeException;
+namespace JDS\Authentication;
 
 class AbstractSession
 {

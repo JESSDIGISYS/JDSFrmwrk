@@ -2,10 +2,9 @@
 
 namespace JDS\Session;
 
-use JDS\Authentication\RuntimeException;
 use Random\RandomException;
 
-class Session extends AbstractSession implements SessionInterface
+class Session implements SessionInterface
 {
     private const FLASH_KEY = 'flash';
     public const AUTH_KEY = 'auth_id';
@@ -13,7 +12,6 @@ class Session extends AbstractSession implements SessionInterface
     public const REFRESH_TOKEN = 'refresh_token';
 
     /**
-     * @throws RuntimeException
      * @throws RandomException
      */
     public function start(): void
@@ -22,7 +20,6 @@ class Session extends AbstractSession implements SessionInterface
         if (session_status() === PHP_SESSION_ACTIVE) {
             return;
         }
-//        $this->configuration();
 
         session_start();
 
@@ -33,22 +30,22 @@ class Session extends AbstractSession implements SessionInterface
 
     public function set(string $key, mixed $value): void
     {
-        $_SESSION[$key] = $value;
+        $_SESSION[$_ENV['SESSION_PREFIX']][$key] = $value;
     }
 
     public function get(string $key, $default = null)
     {
-        return $_SESSION[$key] ?? $default;
+        return $_SESSION[$_ENV['SESSION_PREFIX']][$key] ?? $default;
     }
 
     public function has(string $key): bool
     {
-        return isset($_SESSION[$key]);
+        return isset($_SESSION[$_ENV['SESSION_PREFIX']][$key]);
     }
 
     public function remove(string $key): void
     {
-        unset($_SESSION[$key]);
+        unset($_SESSION[$_ENV['SESSION_PREFIX']][$key]);
     }
 
     public function getFlash(string $type): array
@@ -72,12 +69,12 @@ class Session extends AbstractSession implements SessionInterface
 
     public function hasFlash(string $type): bool
     {
-        return isset($_SESSION[self::FLASH_KEY][$type]);
+        return isset($_SESSION[$_ENV['SESSION_PREFIX']][self::FLASH_KEY][$type]);
     }
 
     public function clearFlash(): void
     {
-        unset($_SESSION[self::FLASH_KEY]);
+        unset($_SESSION[$_ENV['SESSION_PREFIX']][self::FLASH_KEY]);
     }
 
     public function isAuthenticated(): bool
@@ -118,7 +115,7 @@ class Session extends AbstractSession implements SessionInterface
     }
     public function clear(): void
     {
-        $_SESSION = [];
+        $_SESSION[$_ENV['SESSION_PREFIX']] = [];
     }
 
     public function resetSessionState(): void

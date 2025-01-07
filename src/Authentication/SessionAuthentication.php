@@ -3,7 +3,6 @@
 namespace JDS\Authentication;
 
 use Firebase\JWT\JWT;
-use JDS\Session\AbstractSession;
 use JDS\Session\Session;
 use JDS\Session\SessionInterface;
 
@@ -116,5 +115,4 @@ class SessionAuthentication extends AbstractSession implements SessionAuthInterf
         return $this->refreshToken;
     }
 }
-
 
