@@ -29,14 +29,14 @@ class AbstractSession
 
     protected function setCookie(): void
     {
-        session_set_cookie_params([
-            'lifetime' => ini_get('session.cookie_lifetime') ?? 300,          // Default to 5 minutes.
-            'path' => ini_get('session.save_path'),                  // Default to root path.
-            'domain' => ini_get('session.cookie_domain') ?? 'localhost',            // Default to current domain.
-            'secure' => ini_get('session.cookie_secure') === "true" ?? false,       // True for secure (HTTPS).
-            'httponly' => ini_get('session.cookie_httponly'),   // True for HTTP-only cookies.
-            'samesite' => ini_get('session.cookie_samesite'),     // Default to "Lax".
-        ]);
+//        session_set_cookie_params([
+//            'lifetime' => ini_get('session.cookie_lifetime') ?? 300,          // Default to 5 minutes.
+//            'path' => ini_get('session.save_path'),                  // Default to root path.
+//            'domain' => ini_get('session.cookie_domain') ?? 'localhost',            // Default to current domain.
+//            'secure' => ini_get('session.cookie_secure') === "true" ?? false,       // True for secure (HTTPS).
+//            'httponly' => ini_get('session.cookie_httponly'),   // True for HTTP-only cookies.
+//            'samesite' => ini_get('session.cookie_samesite'),     // Default to "Lax".
+//        ]);
 
     }
 }
