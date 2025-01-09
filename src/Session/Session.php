@@ -101,7 +101,7 @@ class Session implements SessionInterface
         // Check if cookies are being used
         if (ini_get('session.use_cookies')) {
             $params = session_get_cookie_params();
-            // Invalidate the session cookie by setting its expiration to a past time
+            // Invalidate the session cookie by setting its expiration to a pastime
             setcookie(
                 session_name(),
                 '',
