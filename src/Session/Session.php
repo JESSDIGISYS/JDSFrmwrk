@@ -48,12 +48,12 @@ class Session implements SessionInterface
         unset($_SESSION[$_ENV['SESSION_PREFIX']][$key]);
     }
 
-    public function getFlash(string $type): array
+    public function getFlash(string $key): array
     {
         $flash = $this->get(self::FLASH_KEY) ?? [];
-        if (isset($flash[$type])) {
-            $messages = $flash[$type];
-            unset($flash[$type]);
+        if (isset($flash[$key])) {
+            $messages = $flash[$key];
+            unset($flash[$key]);
             $this->set(self::FLASH_KEY, $flash);
             return $messages;
         }
