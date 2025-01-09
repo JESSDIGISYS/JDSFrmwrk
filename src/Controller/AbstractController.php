@@ -6,6 +6,7 @@ use JDS\Http\Request;
 use JDS\Http\Response;
 use Psr\Container\ContainerInterface;
 
+
 abstract class AbstractController
 {
 	protected ?ContainerInterface $container = null;
