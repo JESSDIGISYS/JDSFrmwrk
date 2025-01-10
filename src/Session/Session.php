@@ -8,8 +8,14 @@ class Session implements SessionInterface
 {
     private const FLASH_KEY = 'flash';
     public const AUTH_KEY = 'auth_id';
+    public const CSRF_TOKEN = 'csrf_token';
     public const ACCESS_TOKEN = 'access_token';
     public const REFRESH_TOKEN = 'refresh_token';
+
+    public function __construct(string $prefix)
+    {
+        defined("PREFIX") ? null : define("PREFIX", $prefix);
+    }
 
     /**
      * @throws RandomException
@@ -23,29 +29,46 @@ class Session implements SessionInterface
 
         session_start();
 
-        if (!$this->has('csrf_token')) {
+        if (!$this->has(self::CSRF_TOKEN)) {
             $this->set('csrf_token', bin2hex(random_bytes(32)));
         }
     }
 
     public function set(string $key, mixed $value): void
-    {
-        $_SESSION[$_ENV['SESSION_PREFIX']][$key] = $value;
+    {        $prefix = PREFIX ?? null;
+        if (!$prefix) {
+            throw new \RuntimeException('Session prefix not defined');
+        }
+
+        $_SESSION[$prefix][$key] = $value;
     }
 
     public function get(string $key, $default = null)
     {
-        return $_SESSION[$_ENV['SESSION_PREFIX']][$key] ?? $default;
+        $prefix = PREFIX ?? null;
+        if (!$prefix) {
+            throw new \RuntimeException('Session prefix not defined');
+        }
+        return $_SESSION[$prefix][$key] ?? $default;
     }
 
     public function has(string $key): bool
     {
-        return isset($_SESSION[$_ENV['SESSION_PREFIX']][$key]);
+        $prefix = PREFIX ?? null;
+        if (!$prefix) {
+            throw new \RuntimeException('Session prefix not defined');
+        }
+        return isset($_SESSION[$prefix][$key]);
     }
 
     public function remove(string $key): void
     {
-        unset($_SESSION[$_ENV['SESSION_PREFIX']][$key]);
+        $prefix = PREFIX ?? null;
+        if (!$prefix) {
+            throw new \RuntimeException('Session prefix not defined');
+        }
+
+        unset($_SESSION[$prefix][$key]);
     }
 
     public function getFlash(string $key): array
@@ -69,12 +92,12 @@ class Session implements SessionInterface
 
     public function hasFlash(string $type): bool
     {
-        return isset($_SESSION[$_ENV['SESSION_PREFIX']][self::FLASH_KEY][$type]);
+        return isset($_SESSION[PREFIX][self::FLASH_KEY][$type]);
     }
 
     public function clearFlash(): void
     {
-        unset($_SESSION[$_ENV['SESSION_PREFIX']][self::FLASH_KEY]);
+        unset($_SESSION[PREFIX][self::FLASH_KEY]);
     }
 
     public function isAuthenticated(): bool
@@ -115,7 +138,7 @@ class Session implements SessionInterface
     }
     public function clear(): void
     {
-        $_SESSION[$_ENV['SESSION_PREFIX']] = [];
+        $_SESSION[PREFIX] = [];
     }
 
     public function resetSessionState(): void
