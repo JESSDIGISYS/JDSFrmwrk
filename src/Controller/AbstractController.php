@@ -24,7 +24,11 @@ abstract class AbstractController
 	public function render(string $template, array $parameters= [], Response $response = null):
 	Response
 	{
-		$content = $this->container->get('twig')->render($template, $parameters);
+        header('Cache-Control: no-cache, no-store, must-revalidate', true);
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        $content = $this->container->get('twig')->render($template, $parameters);
 
 		$response ??= new Response();
 
