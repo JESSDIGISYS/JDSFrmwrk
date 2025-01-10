@@ -12,8 +12,11 @@ class Session implements SessionInterface
     public const ACCESS_TOKEN = 'access_token';
     public const REFRESH_TOKEN = 'refresh_token';
 
-    public function __construct(string $prefix)
+    public function __construct(string $prefix=null)
     {
+        if (is_null($prefix)) {
+            throw new \RuntimeException('Session prefix not defined');
+        }
         defined("PREFIX") ? null : define("PREFIX", $prefix);
     }
 
@@ -30,45 +33,28 @@ class Session implements SessionInterface
         session_start();
 
         if (!$this->has(self::CSRF_TOKEN)) {
-            $this->set('csrf_token', bin2hex(random_bytes(32)));
+            $this->set(self::CSRF_TOKEN, bin2hex(random_bytes(32)));
         }
     }
 
     public function set(string $key, mixed $value): void
-    {        $prefix = PREFIX ?? null;
-        if (!$prefix) {
-            throw new \RuntimeException('Session prefix not defined');
-        }
-
-        $_SESSION[$prefix][$key] = $value;
+    {
+        $_SESSION[PREFIX][$key] = $value;
     }
 
     public function get(string $key, $default = null)
     {
-        $prefix = PREFIX ?? null;
-        if (!$prefix) {
-            throw new \RuntimeException('Session prefix not defined');
-        }
-        return $_SESSION[$prefix][$key] ?? $default;
+        return $_SESSION[PREFIX][$key] ?? $default;
     }
 
     public function has(string $key): bool
     {
-        $prefix = PREFIX ?? null;
-        if (!$prefix) {
-            throw new \RuntimeException('Session prefix not defined');
-        }
-        return isset($_SESSION[$prefix][$key]);
+        return isset($_SESSION[PREFIX][$key]);
     }
 
     public function remove(string $key): void
     {
-        $prefix = PREFIX ?? null;
-        if (!$prefix) {
-            throw new \RuntimeException('Session prefix not defined');
-        }
-
-        unset($_SESSION[$prefix][$key]);
+        unset($_SESSION[PREFIX][$key]);
     }
 
     public function getFlash(string $key): array
@@ -122,19 +108,19 @@ class Session implements SessionInterface
     private function invalidateSessionCookie(): void
     {
         // Check if cookies are being used
-        if (ini_get('session.use_cookies')) {
-            $params = session_get_cookie_params();
-            // Invalidate the session cookie by setting its expiration to a pastime
-            setcookie(
-                session_name(),
-                '',
-                time() - 42000,
-                $params['path'],
-                $params['domain'],
-                $params['secure'],
-                $params['httponly']
-            );
-        }
+//        if (ini_get('session.use_cookies')) {
+//            $params = session_get_cookie_params();
+//            // Invalidate the session cookie by setting its expiration to a pastime
+//            setcookie(
+//                session_name(),
+//                '',
+//                time() - 42000,
+//                $params['path'],
+//                $params['domain'],
+//                $params['secure'],
+//                $params['httponly']
+//            );
+//        }
     }
     public function clear(): void
     {
