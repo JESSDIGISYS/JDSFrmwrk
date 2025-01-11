@@ -53,7 +53,6 @@ class SessionAuthentication extends AbstractSession implements SessionAuthInterf
 
         // start a session
         $this->session->start();
-        $this->setCookie();
         $issuedAt = time();
         // todo PUT JWT HERE
         $commonPayload = [
@@ -96,7 +95,7 @@ class SessionAuthentication extends AbstractSession implements SessionAuthInterf
 
         // Optionally clear the entire session
         $this->session->clear();
-
+        $this->resetCookie();
         // Destroy the session
         $this->session->destroy();
     }
