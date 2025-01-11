@@ -27,8 +27,15 @@ class AbstractSession
         // Set session cookie parameters.
     }
 
-    protected function setCookie(): void
+    protected function resetCookie(): void
     {
+        setcookie(
+            session_name(),
+            '',
+            time() - 42000,
+            '/'
+        );
+
 //        session_set_cookie_params([
 //            'lifetime' => ini_get('session.cookie_lifetime') ?? 300,          // Default to 5 minutes.
 //            'path' => ini_get('session.save_path'),                  // Default to root path.

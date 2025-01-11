@@ -123,16 +123,6 @@ class Session implements SessionInterface
     {
         $_SESSION[PREFIX] = [];
     }
-
-    public function resetSessionState(): void
-    {
-        $authId = self::AUTH_KEY; // Preserve the current user's ID
-
-        $this->clear(); // Clears all session data
-
-        // Restore the authentication key to keep the user logged in
-        $this->set(Session::AUTH_KEY, $authId);
-    }
 }
 
 
