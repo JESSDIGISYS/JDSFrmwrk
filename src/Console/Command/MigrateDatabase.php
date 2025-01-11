@@ -108,6 +108,10 @@ class MigrateDatabase implements CommandInterface
             }
             // migrations down
         } elseif (array_key_exists('down', $params)) {
+            if (isset($_COOKIE['PHPSESSID'])) {
+                unset($_COOKIE['PHPSESSID']);
+                setcookie('PHPSESSID', '', time() - 3600, '/');
+            }
             if (is_numeric($params['down'])) {
                 $down = $params['down'];
                 $found = false;
