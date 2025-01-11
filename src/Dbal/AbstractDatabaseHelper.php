@@ -56,4 +56,9 @@ abstract class AbstractDatabaseHelper
         }
     }
 
+    public function getDataMapper(DataMapper $dataMapper): DataMapper
+    {
+        return $dataMapper;
+    }
+
 }
