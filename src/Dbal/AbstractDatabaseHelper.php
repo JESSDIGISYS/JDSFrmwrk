@@ -9,6 +9,8 @@ use Doctrine\DBAL\Statement;
 
 abstract class AbstractDatabaseHelper
 {
+    protected DataMapper $dataMapper;
+
     /**
      * @throws Exception
      */
@@ -56,9 +58,14 @@ abstract class AbstractDatabaseHelper
         }
     }
 
-    public function getDataMapper(DataMapper $dataMapper): DataMapper
+    public function getDataMapper(): DataMapper
     {
-        return $dataMapper;
+        return $this->dataMapper;
+    }
+
+    public function setDataMapper(DataMapper $dataMapper): void
+    {
+        $this->dataMapper = $dataMapper;
     }
 
 }
