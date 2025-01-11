@@ -111,15 +111,12 @@ class Session implements SessionInterface
 //        if (ini_get('session.use_cookies')) {
 //            $params = session_get_cookie_params();
 //            // Invalidate the session cookie by setting its expiration to a pastime
-//            setcookie(
-//                session_name(),
-//                '',
-//                time() - 42000,
-//                $params['path'],
-//                $params['domain'],
-//                $params['secure'],
-//                $params['httponly']
-//            );
+            setcookie(
+                session_name(),
+                '',
+                time() - 42000,
+                '/'
+            );
 //        }
     }
     public function clear(): void
