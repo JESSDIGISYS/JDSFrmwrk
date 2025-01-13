@@ -12,6 +12,7 @@ use JDS\Http\HttpRequestMethodException;
 use JDS\Http\Request;
 use JDS\Http\Response;
 use League\Container\Container;
+use SimpleXMLElement;
 use function FastRoute\simpleDispatcher;
 
 class ExtractRouteInfo implements MiddlewareInterface
