@@ -6,6 +6,7 @@ namespace JDS\Http\Middleware;
 use Exception;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
+use JDS\Authentication\RuntimeException;
 use JDS\Http\HttpException;
 use JDS\Http\HttpRequestMethodException;
 use JDS\Http\Request;
@@ -35,6 +36,11 @@ class ExtractRouteInfo implements MiddlewareInterface
 				$routeCollector->addRoute(...$route);
 			}
 		});
+
+        // Generate the sitemap if it hasn't been updated in a month
+        if ($this->shouldRegenerateSitemap()) {
+            $this->generateSitemap($dispatcher);
+        }
 
 		// dispatch a URI, to obtain the route info
 		$routeInfo = $dispatcher->dispatch(
@@ -70,5 +76,52 @@ class ExtractRouteInfo implements MiddlewareInterface
 
 		return $requestHandler->handle($request);
 	}
+
+    private function shouldRegenerateSitemap(): bool
+    {
+        $sitemapPath = $this->routePath . '/sitemap.xml'; // Path to your sitemap file
+        $oneMonthInSeconds = 30 * 24 * 60 * 60; // 30 days in seconds
+
+        // Check if the sitemap file does not exist or if it hasn't been updated in the last month
+        return !file_exists($sitemapPath) || (time() - filemtime($sitemapPath) > $oneMonthInSeconds);
+    }
+    private function generateSitemap($dispatcher, $baseUrl = 'https://jessdigisys.com') {
+        // Create the root XML structure for a sitemap
+        $sitemap = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>');
+
+        $routeData = $dispatcher->getData(); // Retrieve route data from FastRoute.
+
+        $lastModified = date('Y-m-d');
+        foreach ($routeData as $routes) {
+            foreach ($routes as $routeGroup) {
+                foreach ($routeGroup as $route) {
+                    // Extract route information
+                    if (isset($route['route'])) {
+                        $path = $route['route'];
+
+                        // Skip dynamic routes like `/blog/{id}` if needed
+                        if (strpos($path, '{') !== false) {
+                            continue;
+                        }
+
+                        // Add a URL entry to the sitemap
+                        $entry = $sitemap->addChild('url');
+                        $entry->addChild('loc', htmlspecialchars($baseUrl . $path)); // Encode URL properly
+                        $entry->addChild('lastmod', $lastModified);                 // Optional: Last modified date
+                        $entry->addChild('changefreq', 'monthly');                  // Optional: Change frequency
+                        $entry->addChild('priority', '0.8');                        // Optional: Priority
+                    }
+                }
+            }
+        }
+
+        // Save the XML (or you could return the XML string)
+        $sitemapPath = rtrim($this->routePath, '/') . '/sitemap.xml';
+        if (!is_dir(dirname($sitemapPath)) || !is_writable(dirname($sitemapPath))) {
+            throw new RuntimeException('Sitemap directory is not writable: ' . dirname($sitemapPath));
+        }
+        $sitemap->asXML($sitemapPath);
+    }
+
 }
 
