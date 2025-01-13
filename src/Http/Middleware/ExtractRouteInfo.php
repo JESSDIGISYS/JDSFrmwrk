@@ -17,7 +17,7 @@ use function FastRoute\simpleDispatcher;
 
 class ExtractRouteInfo implements MiddlewareInterface
 {
-    public function __construct(private readonly array $routes, private readonly string $routePath)
+    public function __construct(private readonly array $routes, private readonly string $routePath, private readonly string $basePath)
     {
     }
 
