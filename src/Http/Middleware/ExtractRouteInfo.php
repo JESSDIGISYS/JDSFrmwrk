@@ -93,18 +93,26 @@ class ExtractRouteInfo implements MiddlewareInterface
     private function generateSitemap(array $routeData, string $baseUrl = 'https://jessdigisys.com'): void
     {
         // Create the root XML structure for a sitemap
-        $sitemap = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>');
+        $sitemap = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>');
 
         $lastModified = date('Y-m-d');
 
-        // Static routes are in 'staticRoutes' of the route data
-        foreach ($routeData['staticRoutes'] as $path => $handler) {
-            // Add a URL entry to the sitemap
-            $entry = $sitemap->addChild('url');
-            $entry->addChild('loc', htmlspecialchars($baseUrl . $path)); // Encode the URL
-            $entry->addChild('lastmod', $lastModified);                 // Optional: Last modified date
-            $entry->addChild('changefreq', 'monthly');                  // Optional: Change frequency
-            $entry->addChild('priority', '0.8');                        // Optional: Priority
+        // Loop through each HTTP method (e.g., "GET", "POST")
+        foreach ($routeData[0] as $httpMethod => $routes) {
+            // Loop through each individual route under the given HTTP method
+            foreach ($routes as $path => $handler) {
+                // Skip routes with dynamic placeholders like "/freelance/blogpost/{id}"
+                if (strpos($path, '{') !== false) {
+                    continue;
+                }
+
+                // Add a URL entry to the sitemap
+                $entry = $sitemap->addChild('url');
+                $entry->addChild('loc', htmlspecialchars($baseUrl . $path)); // Encode the URL
+                $entry->addChild('lastmod', $lastModified);                 // Optional: Last modified date
+                $entry->addChild('changefreq', 'monthly');                  // Optional: Change frequency
+                $entry->addChild('priority', '0.8');                        // Optional: Priority
+            }
         }
 
         // Save the XML (or you could return the XML string)
