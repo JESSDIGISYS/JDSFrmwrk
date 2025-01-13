@@ -83,7 +83,7 @@ class ExtractRouteInfo implements MiddlewareInterface
 
     private function shouldRegenerateSitemap(): bool
     {
-        $sitemapPath = $this->routePath . '/sitemap.xml'; // Path to your sitemap file
+        $sitemapPath = $this->basePath . '/sitemap.xml'; // Path to your sitemap file
         $oneMonthInSeconds = 30 * 24 * 60 * 60; // 30 days in seconds
 
         // Check if the sitemap file does not exist or if it hasn't been updated in the last month
@@ -116,7 +116,7 @@ class ExtractRouteInfo implements MiddlewareInterface
         }
 
         // Save the XML (or you could return the XML string)
-        $sitemapPath = rtrim($this->routePath, '/') . '/sitemap.xml';
+        $sitemapPath = rtrim($this->basePath, '/') . '/sitemap.xml';
         if (!is_dir(dirname($sitemapPath)) || !is_writable(dirname($sitemapPath))) {
             throw new \RuntimeException('Sitemap directory is not writable: ' . dirname($sitemapPath));
         }
