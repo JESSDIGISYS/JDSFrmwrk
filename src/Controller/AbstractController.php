@@ -36,5 +36,66 @@ abstract class AbstractController
 
 		return $response;
 	}
+
+    protected function handleImageUpload(): array {
+        $imageInfos = [];
+        if (count($_FILES["pictures"]["error"]) > 20) {
+            throw new \Exception('Too many files!');
+        }
+
+        foreach ($_FILES["pictures"]["error"] as $key => $error) {
+            if ($error == UPLOAD_ERR_OK) {
+                $img_extension = $this->getImageExtensionByType($_FILES["pictures"]["type"][$key]);
+                $tmp_name = $_FILES["pictures"]["tmp_name"][$key];
+                if ($this->checkFileUploadName($_FILES["pictures"]["name"][$key])) {
+                    $imageInfo = $this->processImage($tmp_name, $img_extension);
+                    $imageInfos[] = $imageInfo;
+                }
+            }
+        }
+        return $imageInfos;
+    }
+
+    private function checkFileUploadName($filename): bool
+    {
+        return (bool)preg_match("`^[-0-9A-Z_.]+$`i", $filename);
+    }
+
+    private function getImageExtensionByType($imageType): string {
+        switch ($imageType) {
+            case 'image/png':
+                return "png";
+            case 'image/jpeg':
+            case 'image/jpg':
+                return "jpg";
+            case 'application/octet-stream':
+                return "heic";
+            default:
+                return "webp";
+        }
+    }
+
+    private function processImage($tmp_name, $img_extension): array {
+        $storePath = "media/gallery";
+        $new_filename = uniqid('gallery-', false);
+        $imageUrl = "$storePath/$new_filename.webp";
+        $thumbnailUrl = "$storePath/$new_filename" . "_thumbnail.webp";
+        move_uploaded_file($tmp_name, "$storePath/$new_filename.$img_extension");
+        if ($img_extension !== "webp") {
+            $this->convertImage("$storePath/$new_filename.$img_extension", "$storePath/$new_filename.webp");
+            unlink("$storePath/$new_filename.$img_extension");
+        }
+        return ['imageUrl' => $imageUrl, 'thumbnailUrl' => $thumbnailUrl];
+    }
+
+
+    private function convertImage($filename, $outfile): void
+    {
+        $thumbnailPath = str_replace(".webp", "_thumbnail.webp", $outfile);
+        // Run the conversion command
+        exec("magick $filename $outfile");
+        exec("magick $filename -thumbnail 150x150 $thumbnailPath");
+    }
+
 }
 
