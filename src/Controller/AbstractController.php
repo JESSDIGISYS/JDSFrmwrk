@@ -37,17 +37,17 @@ abstract class AbstractController
 		return $response;
 	}
 
-    protected function handleImageUpload(): array {
+    protected function handleImageUpload(string $images, int $numFiles=20): array {
         $imageInfos = [];
-        if (count($_FILES["pictures"]["error"]) > 20) {
+        if (count($_FILES[$images]["error"]) > $numFiles) {
             throw new \Exception('Too many files!');
         }
 
-        foreach ($_FILES["pictures"]["error"] as $key => $error) {
+        foreach ($_FILES[$images]["error"] as $key => $error) {
             if ($error == UPLOAD_ERR_OK) {
-                $img_extension = $this->getImageExtensionByType($_FILES["pictures"]["type"][$key]);
-                $tmp_name = $_FILES["pictures"]["tmp_name"][$key];
-                if ($this->checkFileUploadName($_FILES["pictures"]["name"][$key])) {
+                $img_extension = $this->getImageExtensionByType($_FILES[$images]["type"][$key]);
+                $tmp_name = $_FILES[$images]["tmp_name"][$key];
+                if ($this->checkFileUploadName($_FILES[$images]["name"][$key])) {
                     $imageInfo = $this->processImage($tmp_name, $img_extension);
                     $imageInfos[] = $imageInfo;
                 }
