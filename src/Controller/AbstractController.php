@@ -37,7 +37,7 @@ abstract class AbstractController
 		return $response;
 	}
 
-    protected function handleImageUpload(string $images, int $numFiles=20): array {
+    protected function handleImageUpload(string $images='pictures', int $numFiles=20): array {
         $imageInfos = [];
         if (count($_FILES[$images]["error"]) > $numFiles) {
             throw new \Exception('Too many files!');
