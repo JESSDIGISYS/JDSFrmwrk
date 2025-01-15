@@ -155,7 +155,7 @@ class MigrateDatabase implements CommandInterface
                     echo "There are no migrations to roll back..." . PHP_EOL;
                 }
                 if ($mig_count >= count($appliedMigrations)) {
-                    $this->connection->executeQuery('TRUNCATE migrations;');
+                    $this->connection->executeQuery('TRUNCATE TABLE migrations;');
                 }
             }
         }
@@ -167,7 +167,17 @@ class MigrateDatabase implements CommandInterface
      */
     private function insertMigration($migration): void
     {
-        $sql = "INSERT INTO migrations (migration_id, migration) VALUES (:migrationid, :mg);";
+        $sql = "INSERT INTO 
+                    migrations 
+                    (
+                        migration_id, 
+                        migration
+                    ) 
+                VALUES 
+                    (
+                        :migrationid, 
+                        :mg
+                     ); ";
         $stmt = $this->connection->prepare($sql);
 
         $stmt->bindValue(':mg', $migration);
@@ -181,7 +191,10 @@ class MigrateDatabase implements CommandInterface
      */
     private function removeMigration($migration): void
     {
-        $sql = "DELETE FROM migrations WHERE migration = :mg;";
+        $sql = "DELETE FROM 
+                    migrations 
+                WHERE 
+                    migration = :mg;";
         $stmt = $this->connection->prepare($sql);
 
         $stmt->bindValue(':mg', $migration);
@@ -269,7 +282,12 @@ class MigrateDatabase implements CommandInterface
      */
     private function getAppliedMigrations(): array
     {
-        $sql = 'SELECT migration FROM migrations ORDER BY migration ASC;';
+        $sql = "SELECT 
+                    migration 
+                FROM 
+                    migrations 
+                ORDER BY 
+                    migration; ";
 
         return $this->connection->executeQuery($sql)->fetchFirstColumn();
     }
@@ -356,7 +374,12 @@ class MigrateDatabase implements CommandInterface
      */
     private function checkIfDatabaseExists(string $database): bool
     {
-        $sql = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = :databaseName;";
+        $sql = "SELECT 
+                    count(*) 
+                FROM 
+                    INFORMATION_SCHEMA.TABLES 
+                WHERE 
+                    TABLE_SCHEMA = :databaseName;";
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue('databaseName', $database);
         $result = $stmt->executeQuery()->fetchFirstColumn();

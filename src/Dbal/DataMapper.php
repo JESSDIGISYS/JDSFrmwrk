@@ -7,7 +7,7 @@ use Doctrine\DBAL\Exception;
 use JDS\Dbal\Events\PostPersist;
 use JDS\EventDispatcher\EventDispatcher;
 
-class DataMapper
+class DataMapper extends AbstractDatabaseHelper
 {
     public function __construct(
         private readonly Connection      $connection,
@@ -46,11 +46,18 @@ class DataMapper
     {
         try {
             // Assuming $pdo is your PDO connection
-            $sql = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = :databaseName AND TABLE_NAME = :tableName;";
+            $sql = "SELECT 
+                        count(*) 
+                    FROM 
+                        INFORMATION_SCHEMA.TABLES 
+                    WHERE 
+                        TABLE_SCHEMA = :databaseName 
+                      AND 
+                        TABLE_NAME = :tableName;";
 
             $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue('databaseName', $database);
-            $stmt->bindValue('tableName', $table);
+            $this->bind($stmt, 'databaseName', $database);
+            $this->bind($stmt, 'tableName', $table);
             $rows = $stmt->executeQuery();
 
             if ($rows->fetchFirstColumn()) {
