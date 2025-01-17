@@ -37,7 +37,7 @@ abstract class AbstractController
 		return $response;
 	}
 
-    protected function handleImageUpload(string $images='pictures', int $numFiles=20): array {
+    protected function handleImageUpload(string $images='pictures', int $numFiles=20, string $storePath="media/gallery"): array {
         $imageInfos = [];
         if (count($_FILES[$images]["error"]) > $numFiles) {
             throw new \Exception('Too many files!');
@@ -48,7 +48,7 @@ abstract class AbstractController
                 $img_extension = $this->getImageExtensionByType($_FILES[$images]["type"][$key]);
                 $tmp_name = $_FILES[$images]["tmp_name"][$key];
                 if ($this->checkFileUploadName($_FILES[$images]["name"][$key])) {
-                    $imageInfo = $this->processImage($tmp_name, $img_extension);
+                    $imageInfo = $this->processImage($tmp_name, $img_extension, $storePath);
                     $imageInfos[] = $imageInfo;
                 }
             }
@@ -75,8 +75,8 @@ abstract class AbstractController
         }
     }
 
-    private function processImage($tmp_name, $img_extension): array {
-        $storePath = "media/gallery";
+    private function processImage(string $tmp_name, string $img_extension, string $storePath): array {
+
         $new_filename = uniqid('gallery-', false);
         $imageUrl = "$storePath/$new_filename.webp";
         $thumbnailUrl = "$storePath/$new_filename" . "_thumbnail.webp";
@@ -85,7 +85,7 @@ abstract class AbstractController
             $this->convertImage("$storePath/$new_filename.$img_extension", "$storePath/$new_filename.webp");
             unlink("$storePath/$new_filename.$img_extension");
         }
-        return ['imageUrl' => $imageUrl, 'thumbnailUrl' => $thumbnailUrl];
+        return ['image_filename' => $imageUrl, 'thumbnail_filename' => $thumbnailUrl, 'image_type' => $img_extension];
     }
 
 
