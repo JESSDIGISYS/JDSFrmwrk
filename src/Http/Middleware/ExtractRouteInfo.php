@@ -32,7 +32,10 @@ class ExtractRouteInfo implements MiddlewareInterface
         $routeData = [];
         $dispatcher = simpleDispatcher(function (RouteCollector $routeCollector) use (&$routeData) {
             foreach ($this->routes as $route) {
-                $routePath = '/' . trim($this->routePath, '/'); // Append the main route path
+                $routePath = trim($this->routePath, '/');
+                if ($routePath !== '') {
+                    $routePath = '/' . trim($this->routePath, '/'); // Append the main route path
+                }
                 $route[1] = $routePath . '/' . trim($route[1], '/'); // Format the specific route path
                 $routeCollector->addRoute(...$route); // Add the route
             }
