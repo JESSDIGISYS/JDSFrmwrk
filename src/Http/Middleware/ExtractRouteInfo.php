@@ -32,9 +32,11 @@ class ExtractRouteInfo implements MiddlewareInterface
         $routeData = [];
         $dispatcher = simpleDispatcher(function (RouteCollector $routeCollector) use (&$routeData) {
             foreach ($this->routes as $route) {
-                $routePath = ((trim($this->routePath, '/') !== '') ? '/' . trim($this->routePath, '/') : ''); // Append the main route path
-                $route[1] = $routePath . '/' . trim($route[1], '/'); // Format the specific route path
-                $routeCollector->addRoute(...$route); // Add the route
+                // Use unified method for normalization and merging
+                $route[1] = $this->mergeAndNormalizeRoutePath($this->routePath, $route[1]);
+
+                // Add route to dispatcher
+                $routeCollector->addRoute(...$route);
             }
 
             // Capture route data from the RouteCollector
@@ -80,6 +82,16 @@ class ExtractRouteInfo implements MiddlewareInterface
 
         return $requestHandler->handle($request);
     }
+
+    private function mergeAndNormalizeRoutePath(string $routePath, string $route): string
+    {
+        // Normalize the routePath
+        $routePath = trim($routePath, '/') !== '' ? '/' . trim($routePath, '/') : '';
+
+        // Normalize and concatenate with the given route
+        return rtrim($routePath . '/' . ltrim(trim($route, '/'), '/'), '/');
+    }
+
 
     private function shouldRegenerateSitemap(): bool
     {
