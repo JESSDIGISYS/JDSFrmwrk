@@ -89,7 +89,8 @@ class ExtractRouteInfo implements MiddlewareInterface
         $routePath = trim($routePath, '/') !== '' ? '/' . trim($routePath, '/') : '';
 
         // Normalize and concatenate with the given route
-        return rtrim($routePath . '/' . ltrim(trim($route, '/'), '/'), '/');
+        $normalizeRoute = rtrim($routePath . '/' . ltrim(trim($route, '/'), '/'), '/');
+        return ($route === '/' ? $normalizeRoute . '/' : $normalizeRoute);
     }
 
 
