@@ -76,16 +76,16 @@ abstract class AbstractController
     }
 
     private function processImage(string $tmp_name, string $img_extension, string $storePath): array {
-
+        $new_extension = "webp";
         $new_filename = uniqid('gallery-', false);
-        $imageUrl = "$storePath/$new_filename.webp";
-        $thumbnailUrl = "$storePath/$new_filename" . "_thumbnail.webp";
+        $imageUrl = "$storePath/$new_filename.$new_extension";
+        $thumbnailUrl = "$storePath/$new_filename" . "_thumbnail.$new_extension";
         move_uploaded_file($tmp_name, "$storePath/$new_filename.$img_extension");
-        if ($img_extension !== "webp") {
-            $this->convertImage("$storePath/$new_filename.$img_extension", "$storePath/$new_filename.webp");
+        if ($img_extension !== $new_extension) {
+            $this->convertImage("$storePath/$new_filename.$img_extension", "$storePath/$new_filename.$new_extension");
             unlink("$storePath/$new_filename.$img_extension");
         }
-        return ['image_filename' => $imageUrl, 'thumbnail_filename' => $thumbnailUrl, 'image_type' => $img_extension];
+        return ['image_filename' => $imageUrl, 'thumbnail_filename' => $thumbnailUrl, 'image_type' => $new_extension];
     }
 
 
