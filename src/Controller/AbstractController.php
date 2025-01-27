@@ -97,5 +97,23 @@ abstract class AbstractController
         exec("magick $filename -thumbnail 150x150 $thumbnailPath");
     }
 
+    public function formatPhoneNumber(string $phone): string
+    {
+        // Remove all non-numeric characters
+        $cleaned = preg_replace('/\D/', '', $phone);
+
+        // Check if it's exactly 10 digits
+        if (strlen($cleaned) === 10) {
+            return sprintf('(%s) %s-%s',
+                substr($cleaned, 0, 3),
+                substr($cleaned, 3, 3),
+                substr($cleaned, 6)
+            );
+        }
+
+        // Return the original string if it doesn't match the expected length
+        return $phone;
+    }
+
 }
 
